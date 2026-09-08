@@ -1,0 +1,634 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum PlanType {
+  FREE
+  UNLIMITED
+}
+
+enum CreditEntryType {
+  DAILY_GRANT
+  BONUS
+  USAGE
+  REFUND
+  ADMIN_ADJUSTMENT
+  RESET
+}
+
+enum AIProviderStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum CapabilityType {
+  TEXT
+  IMAGE
+  VISION
+  STT
+  TTS
+  VIDEO
+}
+
+enum WhatsAppStatus {
+  DISCONNECTED
+  CONNECTING
+  CONNECTED
+  ERROR
+}
+
+enum AutomationStatus {
+  ACTIVE
+  PAUSED
+  DISABLED
+}
+
+enum ConversationMode {
+  AI_ACTIVE
+  HUMAN_ACTIVE
+  AI_PAUSED
+}
+
+enum MemoryType {
+  SHORT_TERM
+  LONG_TERM
+  USER_DEFINED
+}
+
+enum WebhookStatus {
+  RECEIVED
+  PROCESSING
+  PROCESSED
+  FAILED
+}
+
+model User {
+  creditAccount CreditAccount?
+
+  id            String     @id @default(cuid())
+  googleSubject String     @unique
+  email         String     @unique
+  name          String?
+  avatarUrl     String?
+  status        UserStatus @default(ACTIVE)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  lastLoginAt   DateTime?
+
+  entitlement      UserEntitlement?
+  creditLedger     CreditLedger[]
+  dailyUsage       DailyUsage[]
+  persona          Persona?
+  contacts         ContactPreference[]
+  memories         Memory[]
+  automations      Automation[]
+  whatsappAccounts WhatsAppAccount[]
+  conversations    Conversation[]
+  notifications    Notification[]
+  auditLogs        AuditLog[]
+  sessions         Session[]
+}
+
+model AdminUser {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  lastLoginAt   DateTime?
+  adminSessions AdminSession[]
+}
+
+model UserEntitlement {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  plan            PlanType @default(FREE)
+  dailyLimit      Int      @default(500)
+  unlimited       Boolean  @default(false)
+  aiEnabled       Boolean  @default(true)
+  whatsappEnabled Boolean  @default(true)
+  updatedAt       DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CreditAccount {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  balance      Int      @default(0)
+  lifetimeUsed BigInt   @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  dailyLimit   Int      @default(500)
+  dailyUsed    Int      @default(0)
+  dailyResetAt DateTime @default(now())
+  unlimited    Boolean  @default(false)
+  isSuspended  Boolean  @default(false)
+}
+
+model CreditLedger {
+  id             String          @id @default(cuid())
+  userId         String
+  amount         Int
+  type           CreditEntryType
+  capability     String?
+  idempotencyKey String          @unique
+  metadata       Json?
+  createdAt      DateTime        @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  balanceAfter Int     @default(0)
+  referenceId  String?
+  description  String?
+
+  @@index([userId, createdAt])
+}
+
+model DailyUsage {
+  id            String   @id @default(cuid())
+  userId        String
+  usageDate     DateTime
+  creditsUsed   Int      @default(0)
+  textRequests  Int      @default(0)
+  imageRequests Int      @default(0)
+  otherRequests Int      @default(0)
+  errors        Int      @default(0)
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, usageDate])
+}
+
+model AIProvider {
+  id        String           @id @default(cuid())
+  name      String
+  slug      String           @unique
+  baseUrl   String
+  apiKeyEnc String
+  protocol  String           @default("openai-compatible")
+  status    AIProviderStatus @default(ACTIVE)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  models AIModel[]
+  routes AIRoute[]
+}
+
+model AIModel {
+  id           String           @id @default(cuid())
+  providerId   String
+  name         String
+  modelId      String
+  capabilities CapabilityType[]
+  enabled      Boolean          @default(true)
+  isFree       Boolean          @default(false)
+  metadata     Json?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  provider AIProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  routes   AIRoute[]
+
+  @@unique([providerId, modelId])
+}
+
+model AIRoute {
+  id         String         @id @default(cuid())
+  capability CapabilityType
+  providerId String
+  modelId    String
+  priority   Int            @default(100)
+  enabled    Boolean        @default(true)
+  creditCost Int            @default(1)
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  provider AIProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  model    AIModel    @relation(fields: [modelId], references: [id], onDelete: Cascade)
+
+  @@unique([capability, priority])
+}
+
+model WhatsAppAccount {
+  id             String         @id @default(cuid())
+  userId         String
+  phoneNumber    String?
+  businessId     String?
+  phoneNumberId  String?
+  accessTokenEnc String?
+  status         WhatsAppStatus @default(DISCONNECTED)
+  connectedAt    DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contacts      WhatsAppContact[]
+  groups        WhatsAppGroup[]
+  conversations Conversation[]
+}
+
+model WhatsAppContact {
+  id          String   @id @default(cuid())
+  accountId   String
+  waId        String
+  displayName String?
+  phoneNumber String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  account WhatsAppAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, waId])
+}
+
+model WhatsAppGroup {
+  id        String   @id @default(cuid())
+  accountId String
+  waId      String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account WhatsAppAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, waId])
+}
+
+model Conversation {
+  id           String           @id @default(cuid())
+  userId       String
+  accountId    String
+  externalId   String
+  title        String?
+  mode         ConversationMode @default(AI_ACTIVE)
+  aiEnabled    Boolean          @default(true)
+  lastActivity DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account  WhatsAppAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  messages Message[]
+
+  @@unique([accountId, externalId])
+  @@index([userId, updatedAt])
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  externalId     String?
+  direction      String
+  messageType    String
+  contentHash    String?
+  mediaUrl       String?
+  processed      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+}
+
+model Persona {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  name           String?
+  description    String?
+  language       String?
+  tone           String?
+  vocabulary     String?
+  emojiStyle     String?
+  humorStyle     String?
+  formality      String?
+  responseLength String?
+  rules          Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ContactPreference {
+  id              String   @id @default(cuid())
+  userId          String
+  externalContact String
+  displayName     String?
+  relationship    String?
+  language        String?
+  tone            String?
+  trusted         Boolean  @default(false)
+  ignored         Boolean  @default(false)
+  aiEnabled       Boolean  @default(true)
+  settings        Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, externalContact])
+}
+
+model Memory {
+  id         String     @id @default(cuid())
+  userId     String
+  type       MemoryType
+  key        String?
+  content    String
+  importance Int        @default(50)
+  enabled    Boolean    @default(true)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+}
+
+model Automation {
+  id          String           @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  status      AutomationStatus @default(ACTIVE)
+  trigger     Json
+  conditions  Json?
+  actions     Json
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  user User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  runs AutomationRun[]
+}
+
+model AutomationRun {
+  id           String    @id @default(cuid())
+  automationId String
+  status       String
+  triggerData  Json?
+  resultData   Json?
+  error        String?
+  startedAt    DateTime  @default(now())
+  finishedAt   DateTime?
+
+  automation Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+
+  @@index([automationId, startedAt])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read, createdAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  adminId   String?
+  action    String
+  entity    String?
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+}
+
+model WebhookEvent {
+  id          String        @id @default(cuid())
+  provider    String
+  externalId  String?
+  eventType   String?
+  payloadHash String?
+  payload     Json?
+  status      WebhookStatus @default(RECEIVED)
+  attempts    Int           @default(0)
+  receivedAt  DateTime      @default(now())
+  processedAt DateTime?
+
+  @@index([provider, receivedAt])
+}
+
+model APIUsage {
+  id         String   @id @default(cuid())
+  userId     String?
+  providerId String?
+  capability String
+  model      String?
+  success    Boolean
+  latencyMs  Int?
+  credits    Int      @default(0)
+  errorCode  String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([providerId, createdAt])
+}
+
+model Session {
+  id               String    @id @default(cuid())
+  userId           String
+  refreshTokenHash String    @unique
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model AdminSession {
+  id               String    @id @default(cuid())
+  adminUserId      String
+  refreshTokenHash String    @unique
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId])
+  @@index([expiresAt])
+}
+
+model AiProvider {
+  id              String   @id @default(cuid())
+  name            String
+  slug            String   @unique
+  protocol        String   @default("openai_compatible")
+  baseUrl         String
+  apiKeyEncrypted String
+  isEnabled       Boolean  @default(true)
+  isDefault       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  models AiModel[]
+
+  @@index([isEnabled])
+}
+
+model AiModel {
+  id          String   @id @default(cuid())
+  providerId  String
+  model       String
+  displayName String?
+  capability  String
+  isEnabled   Boolean  @default(true)
+  isDefault   Boolean  @default(false)
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  provider AiProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, model, capability])
+  @@index([capability, isEnabled])
+}
+
+model AiRoute {
+  id         String   @id @default(cuid())
+  capability String
+  providerId String?
+  modelId    String?
+  priority   Int      @default(100)
+  isEnabled  Boolean  @default(true)
+  fallback   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([capability, isEnabled, priority])
+}
+
+model CreditCost {
+  id         String   @id @default(cuid())
+  capability String   @unique
+  cost       Int      @default(1)
+  isEnabled  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model WhatsAppMessage {
+  id                String   @id @default(cuid())
+  accountId         String
+  externalMessageId String   @unique
+  direction         String
+  messageType       String
+  fromNumber        String?
+  toNumber          String?
+  text              String?
+  mediaId           String?
+  status            String?
+  rawMetadata       Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([accountId, createdAt])
+  @@index([fromNumber, createdAt])
+  @@index([direction, createdAt])
+}
+
+model WhatsAppWebhookEvent {
+  id           String    @id @default(cuid())
+  eventId      String    @unique
+  accountId    String?
+  eventType    String
+  payload      Json
+  processed    Boolean   @default(false)
+  processedAt  DateTime?
+  errorMessage String?
+  createdAt    DateTime  @default(now())
+
+  @@index([accountId, createdAt])
+  @@index([processed, createdAt])
+}
+
+model HexjitAutomation {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String
+  enabled       Boolean  @default(true)
+  priority      Int      @default(100)
+  triggerType   String
+  triggerConfig Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId, enabled])
+  @@index([userId, priority])
+}
+
+model HexjitAutomationCondition {
+  id            String   @id @default(cuid())
+  automationId  String
+  conditionType String
+  value         Json?
+  position      Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([automationId, position])
+}
+
+model HexjitAutomationAction {
+  id           String   @id @default(cuid())
+  automationId String
+  actionType   String
+  actionConfig Json?
+  position     Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([automationId, position])
+}
+
+model HexjitAutomationRun {
+  id           String    @id @default(cuid())
+  automationId String
+  userId       String
+  status       String    @default("RUNNING")
+  eventType    String
+  eventData    Json?
+  resultData   Json?
+  errorMessage String?
+  startedAt    DateTime  @default(now())
+  completedAt  DateTime?
+
+  @@index([automationId, startedAt])
+  @@index([userId, startedAt])
+  @@index([status, startedAt])
+}

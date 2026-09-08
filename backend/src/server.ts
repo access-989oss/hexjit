@@ -1,95 +1,115 @@
+import rawBody from "fastify-raw-body";
+import { registerWhatsAppAdminRoutes } from "./modules/whatsapp/admin/index.js";
+import { registerWhatsAppWebhookRoutes } from "./modules/whatsapp/index.js";
+import { registerCreditRoutes } from "./modules/credits/index.js";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
-import dotenv from "dotenv";
-import { Pool } from "pg";
-import Redis from "ioredis";
+import rateLimit from "@fastify/rate-limit";
 
-dotenv.config();
+import { env } from "./config/env.js";
+import { prisma } from "./lib/prisma.js";
+import { redis } from "./lib/redis.js";
+import { healthRoutes } from "./routes/health.js";
+import { apiRoutes } from "./routes/index.js";
 
 const app = Fastify({
   logger: true,
-});
+  trustProxy: true,
+})
 
-const PORT = Number(process.env.PORT || 3000);
-const HOST = process.env.HOST || "0.0.0.0";
+  await app.register(rawBody, {
+    field: "rawBody",
+    global: false,
+    encoding: "utf8",
+    runFirst: true,
+  });
 
-const postgres = new Pool({
-  host: process.env.DB_HOST || "127.0.0.1",
-  port: Number(process.env.DB_PORT || 5432),
-  database: process.env.DB_NAME || "hexjit",
-  user: process.env.DB_USER || "hexjit",
-  password: process.env.DB_PASSWORD,
-});
+;
 
-const redis = new Redis({
-  host: process.env.REDIS_HOST || "127.0.0.1",
-  port: Number(process.env.REDIS_PORT || 6379),
-});
+await app.register(helmet);
 
-app.register(cors, {
+await app.register(cors, {
   origin: true,
+  credentials: true,
 });
 
-app.register(helmet);
-
-app.get("/health", async () => {
-  let database = "error";
-  let redisStatus = "error";
-
-  try {
-    await postgres.query("SELECT 1");
-    database = "ok";
-  } catch (error) {
-    app.log.error(error);
-  }
-
-  try {
-    await redis.ping();
-    redisStatus = "ok";
-  } catch (error) {
-    app.log.error(error);
-  }
-
-  return {
-    success: database === "ok" && redisStatus === "ok",
-    service: "hexjit-backend",
-    database,
-    redis: redisStatus,
-    timestamp: new Date().toISOString(),
-  };
+await app.register(rateLimit, {
+  max: 100,
+  timeWindow: "1 minute",
 });
 
-app.get("/", async () => {
-  return {
-    name: "Hexjit",
-    service: "Backend API",
-    status: "running",
-  };
+await app.register(healthRoutes);
+
+await app.register(apiRoutes, {
+  prefix: "/api/v1",
 });
 
-const start = async () => {
-  try {
-    await app.listen({
-      port: PORT,
-      host: HOST,
-    });
+app.setErrorHandler((error: unknown, request, reply) => {
+  request.log.error(error);
 
-    app.log.info(`Hexjit backend running on ${HOST}:${PORT}`);
+  const err =
+    error instanceof Error
+      ? error
+      : new Error("Unknown server error");
+
+  const statusCode =
+    typeof error === "object" &&
+    error !== null &&
+    "statusCode" in error &&
+    typeof (error as { statusCode?: unknown }).statusCode === "number" &&
+    (error as { statusCode: number }).statusCode >= 400
+      ? (error as { statusCode: number }).statusCode
+      : 500;
+
+  return reply.code(statusCode).send({
+    success: false,
+    error:
+      statusCode >= 500
+        ? "INTERNAL_SERVER_ERROR"
+        : err.message,
+  });
+});
+
+app.setNotFoundHandler((request, reply) => {
+  return reply.code(404).send({
+    success: false,
+    error: "ROUTE_NOT_FOUND",
+    path: request.url,
+  });
+});
+
+const shutdown = async (signal: string) => {
+  app.log.info(`Received ${signal}; shutting down`);
+
+  try {
+    await app.close();
+    await prisma.$disconnect();
+    await redis.quit();
+    process.exit(0);
   } catch (error) {
     app.log.error(error);
     process.exit(1);
   }
 };
 
-const shutdown = async () => {
-  await app.close();
-  await postgres.end();
-  await redis.quit();
-  process.exit(0);
-};
+process.on("SIGTERM", () => void shutdown("SIGTERM"));
+process.on("SIGINT", () => void shutdown("SIGINT"));
 
-process.on("SIGINT", shutdown);
-process.on("SIGTERM", shutdown);
+try {
+  await registerWhatsAppWebhookRoutes(app);
 
-start();
+  await app.listen({
+    host: env.server.host,
+    port: env.server.port,
+  });
+
+  app.log.info(
+    `Hexjit backend running on ${env.server.host}:${env.server.port}`,
+  );
+} catch (error) {
+  app.log.error(error);
+  await prisma.$disconnect();
+  redis.disconnect();
+  process.exit(1);
+}

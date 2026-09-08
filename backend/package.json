@@ -4,7 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "prisma generate",
+    "db:validate": "prisma validate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:status": "prisma migrate status",
+    "admin:bootstrap": "tsx scripts/bootstrap-admin.ts",
+    "credits:seed": "tsx scripts/seed-credit-costs.ts",
+    "worker": "tsx src/modules/scheduler/scheduler.worker.ts"
   },
   "keywords": [],
   "author": "",
@@ -14,17 +27,24 @@
     "@fastify/helmet": "^13.1.1",
     "@fastify/jwt": "^10.2.2",
     "@fastify/rate-limit": "^11.2.0",
+    "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
+    "bullmq": "^6.3.4",
     "dotenv": "^17.4.2",
     "fastify": "^5.12.3",
+    "fastify-raw-body": "^6.0.1",
+    "google-auth-library": "^11.0.2",
     "ioredis": "^6.0.0",
+    "jose": "^6.2.12",
     "pg": "^8.23.0",
-    "prisma": "^8.0.0-rc.13",
     "zod": "^4.5.4"
   },
   "devDependencies": {
     "@types/node": "^26.4.1",
+    "@types/pg": "^8.23.1",
+    "prisma": "^7.10.0",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"
-  }
+  },
+  "type": "module"
 }
