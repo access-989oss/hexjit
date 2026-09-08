@@ -5,6 +5,8 @@ import { meRoutes } from "../modules/auth/me.routes.js";
 import { adminAuthRoutes } from "../modules/admin-auth/admin-auth.routes.js";
 import { adminMeRoutes } from "../modules/admin-auth/admin-me.routes.js";
 import { aiRoutes } from "../modules/ai/index.js";
+import { registerWhatsAppAdminRoutes } from "../modules/whatsapp/admin/index.js";
+import { registerCreditRoutes } from "../modules/credits/index.js";
 
 export async function apiRoutes(
   app: FastifyInstance,
@@ -15,4 +17,6 @@ export async function apiRoutes(
   await app.register(adminAuthRoutes);
   await app.register(adminMeRoutes);
   await app.register(aiRoutes);
+  await app.register(registerWhatsAppAdminRoutes);
+  await app.register(registerCreditRoutes);
 }

@@ -55,11 +55,9 @@ export const ModelName = {
   AdminUser: 'AdminUser',
   UserEntitlement: 'UserEntitlement',
   CreditAccount: 'CreditAccount',
+  CreditOperation: 'CreditOperation',
   CreditLedger: 'CreditLedger',
   DailyUsage: 'DailyUsage',
-  AIProvider: 'AIProvider',
-  AIModel: 'AIModel',
-  AIRoute: 'AIRoute',
   WhatsAppAccount: 'WhatsAppAccount',
   WhatsAppContact: 'WhatsAppContact',
   WhatsAppGroup: 'WhatsAppGroup',
@@ -163,6 +161,20 @@ export const CreditAccountScalarFieldEnum = {
 export type CreditAccountScalarFieldEnum = (typeof CreditAccountScalarFieldEnum)[keyof typeof CreditAccountScalarFieldEnum]
 
 
+export const CreditOperationScalarFieldEnum = {
+  id: 'id',
+  operationId: 'operationId',
+  userId: 'userId',
+  capability: 'capability',
+  amount: 'amount',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreditOperationScalarFieldEnum = (typeof CreditOperationScalarFieldEnum)[keyof typeof CreditOperationScalarFieldEnum]
+
+
 export const CreditLedgerScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -193,52 +205,6 @@ export const DailyUsageScalarFieldEnum = {
 } as const
 
 export type DailyUsageScalarFieldEnum = (typeof DailyUsageScalarFieldEnum)[keyof typeof DailyUsageScalarFieldEnum]
-
-
-export const AIProviderScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  slug: 'slug',
-  baseUrl: 'baseUrl',
-  apiKeyEnc: 'apiKeyEnc',
-  protocol: 'protocol',
-  status: 'status',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AIProviderScalarFieldEnum = (typeof AIProviderScalarFieldEnum)[keyof typeof AIProviderScalarFieldEnum]
-
-
-export const AIModelScalarFieldEnum = {
-  id: 'id',
-  providerId: 'providerId',
-  name: 'name',
-  modelId: 'modelId',
-  capabilities: 'capabilities',
-  enabled: 'enabled',
-  isFree: 'isFree',
-  metadata: 'metadata',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AIModelScalarFieldEnum = (typeof AIModelScalarFieldEnum)[keyof typeof AIModelScalarFieldEnum]
-
-
-export const AIRouteScalarFieldEnum = {
-  id: 'id',
-  capability: 'capability',
-  providerId: 'providerId',
-  modelId: 'modelId',
-  priority: 'priority',
-  enabled: 'enabled',
-  creditCost: 'creditCost',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AIRouteScalarFieldEnum = (typeof AIRouteScalarFieldEnum)[keyof typeof AIRouteScalarFieldEnum]
 
 
 export const WhatsAppAccountScalarFieldEnum = {
@@ -621,6 +587,7 @@ export const HexjitAutomationRunScalarFieldEnum = {
   id: 'id',
   automationId: 'automationId',
   userId: 'userId',
+  idempotencyKey: 'idempotencyKey',
   status: 'status',
   eventType: 'eventType',
   eventData: 'eventData',

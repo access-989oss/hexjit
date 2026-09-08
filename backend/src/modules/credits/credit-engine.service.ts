@@ -11,6 +11,7 @@ function validateAmount(
 ): number {
   if (
     !Number.isFinite(amount) ||
+    !Number.isInteger(amount) ||
     amount < 0
   ) {
     throw new Error(
@@ -21,21 +22,38 @@ function validateAmount(
   return amount;
 }
 
-async function findAccount(
-  userId: string,
-) {
-  return prisma.creditAccount.findUnique({
-    where: {
-      userId,
-    },
-  });
+function startOfTodayUtc(): Date {
+  const now = new Date();
+
+  return new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+    ),
+  );
+}
+
+function nextUtcDay(): Date {
+  const value =
+    startOfTodayUtc();
+
+  value.setUTCDate(
+    value.getUTCDate() + 1,
+  );
+
+  return value;
 }
 
 async function ensureAccount(
   userId: string,
 ) {
   const existing =
-    await findAccount(userId);
+    await prisma.creditAccount.findUnique({
+      where: {
+        userId,
+      },
+    });
 
   if (existing) {
     return existing;
@@ -44,10 +62,45 @@ async function ensureAccount(
   return prisma.creditAccount.create({
     data: {
       userId,
-      balance: 0,
+      balance: 500,
+      dailyLimit: 500,
+      dailyUsed: 0,
+      dailyResetAt: nextUtcDay(),
+      unlimited: false,
+      isSuspended: false,
       lifetimeUsed: 0,
     },
   });
+}
+
+async function normalizeDailyState(
+  tx: Parameters<
+    Parameters<typeof prisma.$transaction>[0]
+  >[0],
+  account: {
+    id: string;
+    dailyResetAt: Date;
+    dailyUsed: number;
+  },
+) {
+  if (
+    account.dailyResetAt <= new Date()
+  ) {
+    await tx.creditAccount.update({
+      where: {
+        id: account.id,
+      },
+      data: {
+        dailyUsed: 0,
+        dailyResetAt:
+          nextUtcDay(),
+      },
+    });
+
+    return 0;
+  }
+
+  return account.dailyUsed;
 }
 
 export async function getCreditSnapshot(
@@ -56,10 +109,31 @@ export async function getCreditSnapshot(
   const account =
     await ensureAccount(userId);
 
+  if (
+    account.dailyResetAt <= new Date()
+  ) {
+    const reset =
+      await prisma.creditAccount.update({
+        where: {
+          id: account.id,
+        },
+        data: {
+          dailyUsed: 0,
+          dailyResetAt:
+            nextUtcDay(),
+        },
+      });
+
+    return {
+      balance: reset.balance,
+      lifetimeUsed: Number(
+        reset.lifetimeUsed,
+      ),
+    };
+  }
+
   return {
-    balance: Number(
-      account.balance,
-    ),
+    balance: account.balance,
     lifetimeUsed: Number(
       account.lifetimeUsed,
     ),
@@ -81,31 +155,138 @@ export async function reserveCredits(
   const amount =
     validateAmount(input.amount);
 
-  if (amount === 0) {
-    return;
-  }
+  /*
+   * Zero-cost operations still get an operation record.
+   * This prevents duplicate execution paths from treating
+   * the same operation inconsistently.
+   */
+  await prisma.$transaction(
+    async (tx) => {
+      const existing =
+        await tx.creditOperation.findUnique({
+          where: {
+            operationId:
+              input.operationId,
+          },
+        });
 
-  const result =
-    await prisma.creditAccount.updateMany({
-      where: {
-        userId:
-          input.userId,
-        balance: {
-          gte: amount,
-        },
-      },
-      data: {
-        balance: {
-          decrement: amount,
-        },
-      },
-    });
+      if (existing) {
+        if (
+          existing.status ===
+          "RESERVED"
+        ) {
+          return;
+        }
 
-  if (result.count !== 1) {
-    throw new Error(
-      "HEXJIT_INSUFFICIENT_CREDITS",
-    );
-  }
+        if (
+          existing.status ===
+          "COMMITTED"
+        ) {
+          return;
+        }
+
+        if (
+          existing.status ===
+          "RELEASED"
+        ) {
+          throw new Error(
+            "CREDIT_OPERATION_ALREADY_RELEASED",
+          );
+        }
+      }
+
+      const account =
+        await tx.creditAccount.findUnique({
+          where: {
+            userId:
+              input.userId,
+          },
+        });
+
+      if (!account) {
+        throw new Error(
+          "CREDIT_ACCOUNT_NOT_FOUND",
+        );
+      }
+
+      if (account.isSuspended) {
+        throw new Error(
+          "CREDIT_ACCOUNT_SUSPENDED",
+        );
+      }
+
+      const dailyUsed =
+        await normalizeDailyState(
+          tx,
+          account,
+        );
+
+      if (
+        !account.unlimited &&
+        dailyUsed + amount >
+          account.dailyLimit
+      ) {
+        throw new Error(
+          "DAILY_CREDIT_LIMIT_REACHED",
+        );
+      }
+
+      if (
+        !account.unlimited &&
+        account.balance < amount
+      ) {
+        throw new Error(
+          "HEXJIT_INSUFFICIENT_CREDITS",
+        );
+      }
+
+      await tx.creditOperation.create({
+        data: {
+          operationId:
+            input.operationId,
+          userId:
+            input.userId,
+          capability:
+            input.capability,
+          amount,
+          status:
+            "RESERVED",
+        },
+      });
+
+      if (amount === 0) {
+        return;
+      }
+
+      await tx.creditAccount.update({
+        where: {
+          id: account.id,
+        },
+        data: {
+          balance: account.unlimited
+            ? account.balance
+            : {
+                decrement:
+                  amount,
+              },
+
+          dailyUsed:
+            account.unlimited
+              ? dailyUsed
+              : {
+                  increment:
+                    amount,
+                },
+
+          dailyResetAt:
+            account.dailyResetAt <=
+            new Date()
+              ? nextUtcDay()
+              : undefined,
+        },
+      });
+    },
+  );
 }
 
 export async function commitCredits(
@@ -114,27 +295,78 @@ export async function commitCredits(
   const amount =
     validateAmount(input.amount);
 
-  if (amount === 0) {
-    return;
-  }
+  await prisma.$transaction(
+    async (tx) => {
+      const operation =
+        await tx.creditOperation.findUnique({
+          where: {
+            operationId:
+              input.operationId,
+          },
+        });
 
-  /*
-   * Reservation already reduced balance.
-   *
-   * Commit moves the consumed amount into
-   * lifetimeUsed.
-   */
-  await prisma.creditAccount.update({
-    where: {
-      userId:
-        input.userId,
+      if (!operation) {
+        throw new Error(
+          "CREDIT_OPERATION_NOT_FOUND",
+        );
+      }
+
+      if (
+        operation.status ===
+        "COMMITTED"
+      ) {
+        return;
+      }
+
+      if (
+        operation.status ===
+        "RELEASED"
+      ) {
+        throw new Error(
+          "CREDIT_OPERATION_ALREADY_RELEASED",
+        );
+      }
+
+      /*
+       * RESERVED -> COMMITTED exactly once.
+       */
+      await tx.creditOperation.update({
+        where: {
+          id:
+            operation.id,
+        },
+        data: {
+          status:
+            "COMMITTED",
+        },
+      });
+
+      if (amount === 0) {
+        return;
+      }
+
+      if (
+        operation.amount !== amount
+      ) {
+        throw new Error(
+          "CREDIT_OPERATION_AMOUNT_MISMATCH",
+        );
+      }
+
+      await tx.creditAccount.update({
+        where: {
+          userId:
+            input.userId,
+        },
+        data: {
+          lifetimeUsed: {
+            increment:
+              amount,
+          },
+        },
+      });
     },
-    data: {
-      lifetimeUsed: {
-        increment: amount,
-      },
-    },
-  });
+  );
 }
 
 export async function releaseCredits(
@@ -143,29 +375,87 @@ export async function releaseCredits(
   const amount =
     validateAmount(input.amount);
 
-  if (amount === 0) {
-    return;
-  }
+  await prisma.$transaction(
+    async (tx) => {
+      const operation =
+        await tx.creditOperation.findUnique({
+          where: {
+            operationId:
+              input.operationId,
+          },
+        });
 
-  await prisma.creditAccount.update({
-    where: {
-      userId:
-        input.userId,
+      if (!operation) {
+        throw new Error(
+          "CREDIT_OPERATION_NOT_FOUND",
+        );
+      }
+
+      if (
+        operation.status ===
+        "RELEASED"
+      ) {
+        return;
+      }
+
+      if (
+        operation.status ===
+        "COMMITTED"
+      ) {
+        throw new Error(
+          "CREDIT_OPERATION_ALREADY_COMMITTED",
+        );
+      }
+
+      if (
+        operation.amount !== amount
+      ) {
+        throw new Error(
+          "CREDIT_OPERATION_AMOUNT_MISMATCH",
+        );
+      }
+
+      await tx.creditOperation.update({
+        where: {
+          id:
+            operation.id,
+        },
+        data: {
+          status:
+            "RELEASED",
+        },
+      });
+
+      if (amount === 0) {
+        return;
+      }
+
+      await tx.creditAccount.update({
+        where: {
+          userId:
+            input.userId,
+        },
+        data: {
+          balance: {
+            increment:
+              amount,
+          },
+
+          dailyUsed: {
+            decrement:
+              amount,
+          },
+        },
+      });
     },
-    data: {
-      balance: {
-        increment: amount,
-      },
-    },
-  });
+  );
 }
-
 
 /*
  * Default V1 credit pricing.
  *
- * Super Admin configuration will replace this resolver
- * later without changing AI Gateway contracts.
+ * Super Admin configuration can replace this resolver
+ * without changing AI Gateway contracts.
  */
 const DEFAULT_COSTS: Record<
   CreditCapability,
@@ -182,7 +472,23 @@ const DEFAULT_COSTS: Record<
 export async function getCreditCost(
   capability: CreditCapability,
 ): Promise<number> {
+  const configured =
+    await prisma.creditCost.findUnique({
+      where: {
+        capability,
+      },
+    });
+
+  if (
+    configured?.isEnabled === false
+  ) {
+    throw new Error(
+      "CREDIT_CAPABILITY_DISABLED",
+    );
+  }
+
   return (
+    configured?.cost ??
     DEFAULT_COSTS[capability] ??
     1
   );

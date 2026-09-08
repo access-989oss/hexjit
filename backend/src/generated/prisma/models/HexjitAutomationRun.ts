@@ -28,6 +28,7 @@ export type HexjitAutomationRunMinAggregateOutputType = {
   id: string | null
   automationId: string | null
   userId: string | null
+  idempotencyKey: string | null
   status: string | null
   eventType: string | null
   errorMessage: string | null
@@ -39,6 +40,7 @@ export type HexjitAutomationRunMaxAggregateOutputType = {
   id: string | null
   automationId: string | null
   userId: string | null
+  idempotencyKey: string | null
   status: string | null
   eventType: string | null
   errorMessage: string | null
@@ -50,6 +52,7 @@ export type HexjitAutomationRunCountAggregateOutputType = {
   id: number
   automationId: number
   userId: number
+  idempotencyKey: number
   status: number
   eventType: number
   eventData: number
@@ -65,6 +68,7 @@ export type HexjitAutomationRunMinAggregateInputType = {
   id?: true
   automationId?: true
   userId?: true
+  idempotencyKey?: true
   status?: true
   eventType?: true
   errorMessage?: true
@@ -76,6 +80,7 @@ export type HexjitAutomationRunMaxAggregateInputType = {
   id?: true
   automationId?: true
   userId?: true
+  idempotencyKey?: true
   status?: true
   eventType?: true
   errorMessage?: true
@@ -87,6 +92,7 @@ export type HexjitAutomationRunCountAggregateInputType = {
   id?: true
   automationId?: true
   userId?: true
+  idempotencyKey?: true
   status?: true
   eventType?: true
   eventData?: true
@@ -173,6 +179,7 @@ export type HexjitAutomationRunGroupByOutputType = {
   id: string
   automationId: string
   userId: string
+  idempotencyKey: string
   status: string
   eventType: string
   eventData: runtime.JsonValue | null
@@ -207,6 +214,7 @@ export type HexjitAutomationRunWhereInput = {
   id?: Prisma.StringFilter<"HexjitAutomationRun"> | string
   automationId?: Prisma.StringFilter<"HexjitAutomationRun"> | string
   userId?: Prisma.StringFilter<"HexjitAutomationRun"> | string
+  idempotencyKey?: Prisma.StringFilter<"HexjitAutomationRun"> | string
   status?: Prisma.StringFilter<"HexjitAutomationRun"> | string
   eventType?: Prisma.StringFilter<"HexjitAutomationRun"> | string
   eventData?: Prisma.JsonNullableFilter<"HexjitAutomationRun">
@@ -220,6 +228,7 @@ export type HexjitAutomationRunOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   automationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   status?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   eventData?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -231,6 +240,7 @@ export type HexjitAutomationRunOrderByWithRelationInput = {
 
 export type HexjitAutomationRunWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  idempotencyKey?: string
   AND?: Prisma.HexjitAutomationRunWhereInput | Prisma.HexjitAutomationRunWhereInput[]
   OR?: Prisma.HexjitAutomationRunWhereInput[]
   NOT?: Prisma.HexjitAutomationRunWhereInput | Prisma.HexjitAutomationRunWhereInput[]
@@ -243,12 +253,13 @@ export type HexjitAutomationRunWhereUniqueInput = Prisma.AtLeast<{
   errorMessage?: Prisma.StringNullableFilter<"HexjitAutomationRun"> | string | null
   startedAt?: Prisma.DateTimeFilter<"HexjitAutomationRun"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"HexjitAutomationRun"> | Date | string | null
-}, "id">
+}, "id" | "idempotencyKey">
 
 export type HexjitAutomationRunOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   automationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   status?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   eventData?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -268,6 +279,7 @@ export type HexjitAutomationRunScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"HexjitAutomationRun"> | string
   automationId?: Prisma.StringWithAggregatesFilter<"HexjitAutomationRun"> | string
   userId?: Prisma.StringWithAggregatesFilter<"HexjitAutomationRun"> | string
+  idempotencyKey?: Prisma.StringWithAggregatesFilter<"HexjitAutomationRun"> | string
   status?: Prisma.StringWithAggregatesFilter<"HexjitAutomationRun"> | string
   eventType?: Prisma.StringWithAggregatesFilter<"HexjitAutomationRun"> | string
   eventData?: Prisma.JsonNullableWithAggregatesFilter<"HexjitAutomationRun">
@@ -281,6 +293,7 @@ export type HexjitAutomationRunCreateInput = {
   id?: string
   automationId: string
   userId: string
+  idempotencyKey: string
   status?: string
   eventType: string
   eventData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -294,6 +307,7 @@ export type HexjitAutomationRunUncheckedCreateInput = {
   id?: string
   automationId: string
   userId: string
+  idempotencyKey: string
   status?: string
   eventType: string
   eventData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -307,6 +321,7 @@ export type HexjitAutomationRunUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   automationId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   eventData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -320,6 +335,7 @@ export type HexjitAutomationRunUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   automationId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   eventData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -333,6 +349,7 @@ export type HexjitAutomationRunCreateManyInput = {
   id?: string
   automationId: string
   userId: string
+  idempotencyKey: string
   status?: string
   eventType: string
   eventData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -346,6 +363,7 @@ export type HexjitAutomationRunUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   automationId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   eventData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -359,6 +377,7 @@ export type HexjitAutomationRunUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   automationId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  idempotencyKey?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   eventData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -372,6 +391,7 @@ export type HexjitAutomationRunCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   automationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   status?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   eventData?: Prisma.SortOrder
@@ -385,6 +405,7 @@ export type HexjitAutomationRunMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   automationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   status?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
@@ -396,6 +417,7 @@ export type HexjitAutomationRunMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   automationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  idempotencyKey?: Prisma.SortOrder
   status?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
@@ -409,6 +431,7 @@ export type HexjitAutomationRunSelect<ExtArgs extends runtime.Types.Extensions.I
   id?: boolean
   automationId?: boolean
   userId?: boolean
+  idempotencyKey?: boolean
   status?: boolean
   eventType?: boolean
   eventData?: boolean
@@ -422,6 +445,7 @@ export type HexjitAutomationRunSelectCreateManyAndReturn<ExtArgs extends runtime
   id?: boolean
   automationId?: boolean
   userId?: boolean
+  idempotencyKey?: boolean
   status?: boolean
   eventType?: boolean
   eventData?: boolean
@@ -435,6 +459,7 @@ export type HexjitAutomationRunSelectUpdateManyAndReturn<ExtArgs extends runtime
   id?: boolean
   automationId?: boolean
   userId?: boolean
+  idempotencyKey?: boolean
   status?: boolean
   eventType?: boolean
   eventData?: boolean
@@ -448,6 +473,7 @@ export type HexjitAutomationRunSelectScalar = {
   id?: boolean
   automationId?: boolean
   userId?: boolean
+  idempotencyKey?: boolean
   status?: boolean
   eventType?: boolean
   eventData?: boolean
@@ -457,7 +483,7 @@ export type HexjitAutomationRunSelectScalar = {
   completedAt?: boolean
 }
 
-export type HexjitAutomationRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "automationId" | "userId" | "status" | "eventType" | "eventData" | "resultData" | "errorMessage" | "startedAt" | "completedAt", ExtArgs["result"]["hexjitAutomationRun"]>
+export type HexjitAutomationRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "automationId" | "userId" | "idempotencyKey" | "status" | "eventType" | "eventData" | "resultData" | "errorMessage" | "startedAt" | "completedAt", ExtArgs["result"]["hexjitAutomationRun"]>
 
 export type $HexjitAutomationRunPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "HexjitAutomationRun"
@@ -466,6 +492,7 @@ export type $HexjitAutomationRunPayload<ExtArgs extends runtime.Types.Extensions
     id: string
     automationId: string
     userId: string
+    idempotencyKey: string
     status: string
     eventType: string
     eventData: runtime.JsonValue | null
@@ -899,6 +926,7 @@ export interface HexjitAutomationRunFieldRefs {
   readonly id: Prisma.FieldRef<"HexjitAutomationRun", 'String'>
   readonly automationId: Prisma.FieldRef<"HexjitAutomationRun", 'String'>
   readonly userId: Prisma.FieldRef<"HexjitAutomationRun", 'String'>
+  readonly idempotencyKey: Prisma.FieldRef<"HexjitAutomationRun", 'String'>
   readonly status: Prisma.FieldRef<"HexjitAutomationRun", 'String'>
   readonly eventType: Prisma.FieldRef<"HexjitAutomationRun", 'String'>
   readonly eventData: Prisma.FieldRef<"HexjitAutomationRun", 'Json'>

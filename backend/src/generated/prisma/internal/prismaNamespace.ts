@@ -401,11 +401,9 @@ export const ModelName = {
   AdminUser: 'AdminUser',
   UserEntitlement: 'UserEntitlement',
   CreditAccount: 'CreditAccount',
+  CreditOperation: 'CreditOperation',
   CreditLedger: 'CreditLedger',
   DailyUsage: 'DailyUsage',
-  AIProvider: 'AIProvider',
-  AIModel: 'AIModel',
-  AIRoute: 'AIRoute',
   WhatsAppAccount: 'WhatsAppAccount',
   WhatsAppContact: 'WhatsAppContact',
   WhatsAppGroup: 'WhatsAppGroup',
@@ -447,7 +445,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "adminUser" | "userEntitlement" | "creditAccount" | "creditLedger" | "dailyUsage" | "aIProvider" | "aIModel" | "aIRoute" | "whatsAppAccount" | "whatsAppContact" | "whatsAppGroup" | "conversation" | "message" | "persona" | "contactPreference" | "memory" | "automation" | "automationRun" | "notification" | "auditLog" | "webhookEvent" | "aPIUsage" | "session" | "adminSession" | "aiProvider" | "aiModel" | "aiRoute" | "creditCost" | "whatsAppMessage" | "whatsAppWebhookEvent" | "hexjitAutomation" | "hexjitAutomationCondition" | "hexjitAutomationAction" | "hexjitAutomationRun"
+    modelProps: "user" | "adminUser" | "userEntitlement" | "creditAccount" | "creditOperation" | "creditLedger" | "dailyUsage" | "whatsAppAccount" | "whatsAppContact" | "whatsAppGroup" | "conversation" | "message" | "persona" | "contactPreference" | "memory" | "automation" | "automationRun" | "notification" | "auditLog" | "webhookEvent" | "aPIUsage" | "session" | "adminSession" | "aiProvider" | "aiModel" | "aiRoute" | "creditCost" | "whatsAppMessage" | "whatsAppWebhookEvent" | "hexjitAutomation" | "hexjitAutomationCondition" | "hexjitAutomationAction" | "hexjitAutomationRun"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -747,6 +745,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CreditOperation: {
+      payload: Prisma.$CreditOperationPayload<ExtArgs>
+      fields: Prisma.CreditOperationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CreditOperationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreditOperationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CreditOperationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreditOperationPayload>
+        }
+        findFirst: {
+          args: Prisma.CreditOperationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreditOperationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CreditOperationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreditOperationPayload>
+        }
+        findMany: {
+          args: Prisma.CreditOperationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreditOperationPayload>[]
+        }
+        create: {
+          args: Prisma.CreditOperationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreditOperationPayload>
+        }
+        createMany: {
+          args: Prisma.CreditOperationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CreditOperationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreditOperationPayload>[]
+        }
+        delete: {
+          args: Prisma.CreditOperationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreditOperationPayload>
+        }
+        update: {
+          args: Prisma.CreditOperationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreditOperationPayload>
+        }
+        deleteMany: {
+          args: Prisma.CreditOperationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CreditOperationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CreditOperationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreditOperationPayload>[]
+        }
+        upsert: {
+          args: Prisma.CreditOperationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CreditOperationPayload>
+        }
+        aggregate: {
+          args: Prisma.CreditOperationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCreditOperation>
+        }
+        groupBy: {
+          args: Prisma.CreditOperationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreditOperationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CreditOperationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CreditOperationCountAggregateOutputType> | number
+        }
+      }
+    }
     CreditLedger: {
       payload: Prisma.$CreditLedgerPayload<ExtArgs>
       fields: Prisma.CreditLedgerFieldRefs
@@ -892,228 +964,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.DailyUsageCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DailyUsageCountAggregateOutputType> | number
-        }
-      }
-    }
-    AIProvider: {
-      payload: Prisma.$AIProviderPayload<ExtArgs>
-      fields: Prisma.AIProviderFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.AIProviderFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIProviderPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.AIProviderFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIProviderPayload>
-        }
-        findFirst: {
-          args: Prisma.AIProviderFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIProviderPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.AIProviderFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIProviderPayload>
-        }
-        findMany: {
-          args: Prisma.AIProviderFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIProviderPayload>[]
-        }
-        create: {
-          args: Prisma.AIProviderCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIProviderPayload>
-        }
-        createMany: {
-          args: Prisma.AIProviderCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.AIProviderCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIProviderPayload>[]
-        }
-        delete: {
-          args: Prisma.AIProviderDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIProviderPayload>
-        }
-        update: {
-          args: Prisma.AIProviderUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIProviderPayload>
-        }
-        deleteMany: {
-          args: Prisma.AIProviderDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.AIProviderUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.AIProviderUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIProviderPayload>[]
-        }
-        upsert: {
-          args: Prisma.AIProviderUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIProviderPayload>
-        }
-        aggregate: {
-          args: Prisma.AIProviderAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAIProvider>
-        }
-        groupBy: {
-          args: Prisma.AIProviderGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AIProviderGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.AIProviderCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AIProviderCountAggregateOutputType> | number
-        }
-      }
-    }
-    AIModel: {
-      payload: Prisma.$AIModelPayload<ExtArgs>
-      fields: Prisma.AIModelFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.AIModelFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIModelPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.AIModelFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIModelPayload>
-        }
-        findFirst: {
-          args: Prisma.AIModelFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIModelPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.AIModelFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIModelPayload>
-        }
-        findMany: {
-          args: Prisma.AIModelFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIModelPayload>[]
-        }
-        create: {
-          args: Prisma.AIModelCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIModelPayload>
-        }
-        createMany: {
-          args: Prisma.AIModelCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.AIModelCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIModelPayload>[]
-        }
-        delete: {
-          args: Prisma.AIModelDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIModelPayload>
-        }
-        update: {
-          args: Prisma.AIModelUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIModelPayload>
-        }
-        deleteMany: {
-          args: Prisma.AIModelDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.AIModelUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.AIModelUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIModelPayload>[]
-        }
-        upsert: {
-          args: Prisma.AIModelUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIModelPayload>
-        }
-        aggregate: {
-          args: Prisma.AIModelAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAIModel>
-        }
-        groupBy: {
-          args: Prisma.AIModelGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AIModelGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.AIModelCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AIModelCountAggregateOutputType> | number
-        }
-      }
-    }
-    AIRoute: {
-      payload: Prisma.$AIRoutePayload<ExtArgs>
-      fields: Prisma.AIRouteFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.AIRouteFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIRoutePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.AIRouteFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIRoutePayload>
-        }
-        findFirst: {
-          args: Prisma.AIRouteFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIRoutePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.AIRouteFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIRoutePayload>
-        }
-        findMany: {
-          args: Prisma.AIRouteFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIRoutePayload>[]
-        }
-        create: {
-          args: Prisma.AIRouteCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIRoutePayload>
-        }
-        createMany: {
-          args: Prisma.AIRouteCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.AIRouteCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIRoutePayload>[]
-        }
-        delete: {
-          args: Prisma.AIRouteDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIRoutePayload>
-        }
-        update: {
-          args: Prisma.AIRouteUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIRoutePayload>
-        }
-        deleteMany: {
-          args: Prisma.AIRouteDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.AIRouteUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.AIRouteUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIRoutePayload>[]
-        }
-        upsert: {
-          args: Prisma.AIRouteUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AIRoutePayload>
-        }
-        aggregate: {
-          args: Prisma.AIRouteAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAIRoute>
-        }
-        groupBy: {
-          args: Prisma.AIRouteGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AIRouteGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.AIRouteCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AIRouteCountAggregateOutputType> | number
         }
       }
     }
@@ -3139,6 +2989,20 @@ export const CreditAccountScalarFieldEnum = {
 export type CreditAccountScalarFieldEnum = (typeof CreditAccountScalarFieldEnum)[keyof typeof CreditAccountScalarFieldEnum]
 
 
+export const CreditOperationScalarFieldEnum = {
+  id: 'id',
+  operationId: 'operationId',
+  userId: 'userId',
+  capability: 'capability',
+  amount: 'amount',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreditOperationScalarFieldEnum = (typeof CreditOperationScalarFieldEnum)[keyof typeof CreditOperationScalarFieldEnum]
+
+
 export const CreditLedgerScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -3169,52 +3033,6 @@ export const DailyUsageScalarFieldEnum = {
 } as const
 
 export type DailyUsageScalarFieldEnum = (typeof DailyUsageScalarFieldEnum)[keyof typeof DailyUsageScalarFieldEnum]
-
-
-export const AIProviderScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  slug: 'slug',
-  baseUrl: 'baseUrl',
-  apiKeyEnc: 'apiKeyEnc',
-  protocol: 'protocol',
-  status: 'status',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AIProviderScalarFieldEnum = (typeof AIProviderScalarFieldEnum)[keyof typeof AIProviderScalarFieldEnum]
-
-
-export const AIModelScalarFieldEnum = {
-  id: 'id',
-  providerId: 'providerId',
-  name: 'name',
-  modelId: 'modelId',
-  capabilities: 'capabilities',
-  enabled: 'enabled',
-  isFree: 'isFree',
-  metadata: 'metadata',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AIModelScalarFieldEnum = (typeof AIModelScalarFieldEnum)[keyof typeof AIModelScalarFieldEnum]
-
-
-export const AIRouteScalarFieldEnum = {
-  id: 'id',
-  capability: 'capability',
-  providerId: 'providerId',
-  modelId: 'modelId',
-  priority: 'priority',
-  enabled: 'enabled',
-  creditCost: 'creditCost',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AIRouteScalarFieldEnum = (typeof AIRouteScalarFieldEnum)[keyof typeof AIRouteScalarFieldEnum]
 
 
 export const WhatsAppAccountScalarFieldEnum = {
@@ -3597,6 +3415,7 @@ export const HexjitAutomationRunScalarFieldEnum = {
   id: 'id',
   automationId: 'automationId',
   userId: 'userId',
+  idempotencyKey: 'idempotencyKey',
   status: 'status',
   eventType: 'eventType',
   eventData: 'eventData',
@@ -3779,34 +3598,6 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-/**
- * Reference to a field of type 'AIProviderStatus'
- */
-export type EnumAIProviderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AIProviderStatus'>
-    
-
-
-/**
- * Reference to a field of type 'AIProviderStatus[]'
- */
-export type ListEnumAIProviderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AIProviderStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'CapabilityType[]'
- */
-export type ListEnumCapabilityTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CapabilityType[]'>
-    
-
-
-/**
- * Reference to a field of type 'CapabilityType'
- */
-export type EnumCapabilityTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CapabilityType'>
     
 
 
@@ -4048,11 +3839,9 @@ export type GlobalOmitConfig = {
   adminUser?: Prisma.AdminUserOmit
   userEntitlement?: Prisma.UserEntitlementOmit
   creditAccount?: Prisma.CreditAccountOmit
+  creditOperation?: Prisma.CreditOperationOmit
   creditLedger?: Prisma.CreditLedgerOmit
   dailyUsage?: Prisma.DailyUsageOmit
-  aIProvider?: Prisma.AIProviderOmit
-  aIModel?: Prisma.AIModelOmit
-  aIRoute?: Prisma.AIRouteOmit
   whatsAppAccount?: Prisma.WhatsAppAccountOmit
   whatsAppContact?: Prisma.WhatsAppContactOmit
   whatsAppGroup?: Prisma.WhatsAppGroupOmit

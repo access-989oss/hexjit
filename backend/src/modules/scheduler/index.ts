@@ -9,7 +9,7 @@ export {
 
 export {
   scheduleAutomationAction,
-} from "./automation-scheduler.service.js";
+} from "./automation-action-scheduler.service.js";
 
 export {
   SCHEDULED_JOB_TYPES,
@@ -21,7 +21,5 @@ export type {
   ScheduledAutomationJobData,
 } from "./scheduler.types.js";
 
-export {
-} from "./automation-action-scheduler.service.js";
 
 export { executeAutomationContinuation } from "./automation-continuation.service.js";

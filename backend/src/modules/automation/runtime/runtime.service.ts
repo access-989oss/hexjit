@@ -56,29 +56,77 @@ export async function executePersistentAutomations(
   const results = [];
 
   for (const automation of selected) {
-    const run =
+    /*
+     * Inbound WhatsApp events carry a stable provider message ID.
+     * Bind the automation run to that ID + automation ID so retries
+     * of the same webhook cannot execute the automation twice.
+     */
+    const idempotencyKey =
+      event.messageId
+        ? `wa:${event.messageId}:automation:${automation.id}`
+        : `event:${event.type}:${automation.id}:${event.accountId}:${event.conversationId ?? "none"}:${event.contactId ?? "none"}:${event.groupId ?? "none"}`;
+
+    const runResult =
       await startPersistentAutomationRun(
         {
           automationId:
             automation.id,
+
           userId:
             event.userId,
+
           eventType:
             event.type,
+
+          idempotencyKey,
+
           eventData: {
             accountId:
               event.accountId,
+
             conversationId:
               event.conversationId,
+
             contactId:
               event.contactId,
+
             groupId:
               event.groupId,
+
             messageId:
               event.messageId,
           },
         },
       );
+
+    const run =
+      runResult.run;
+
+    if (
+      runResult.alreadyRunning ||
+      runResult.alreadyCompleted
+    ) {
+      results.push({
+        automationId:
+          automation.id,
+
+        runId:
+          run.id,
+
+        success:
+          run.status === "COMPLETED",
+
+        skipped:
+          true,
+
+        reason:
+          run.status === "COMPLETED"
+            ? "AUTOMATION_ALREADY_COMPLETED"
+            : "AUTOMATION_ALREADY_RUNNING",
+      });
+
+      continue;
+    }
 
     try {
       /*

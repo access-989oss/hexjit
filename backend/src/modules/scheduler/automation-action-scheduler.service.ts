@@ -1,4 +1,5 @@
 import type { JobsOptions } from "bullmq";
+import { createHash } from "node:crypto";
 import { automationSchedulerQueue } from "./scheduler.queue.js";
 
 export type ScheduledAutomationActionJob = {
@@ -107,16 +108,39 @@ export async function scheduleAutomationAction(
     },
 
     /*
-     * Deterministic job id prevents accidental duplicate
-     * scheduling when the same automation event is retried.
+     * Deterministic job id prevents duplicate WAIT jobs
+     * when the same inbound event is retried.
+     *
+     * Prefer the originating WhatsApp/provider message id.
+     * The stable payload hash is the fallback for scheduled
+     * automations that do not carry a provider message id.
      */
-    jobId: [
-      input.automationId,
-      input.userId,
-      input.conversationId ?? "no-conversation",
-      String(input.startAtIndex),
-      String(Date.now()),
-    ].join(":"),
+    jobId: (() => {
+      const messageId =
+        typeof input.metadata?.messageId === "string"
+          ? input.metadata.messageId
+          : typeof input.metadata?.externalMessageId === "string"
+            ? input.metadata.externalMessageId
+            : undefined;
+
+      const stableSeed = [
+        input.automationId,
+        input.userId,
+        input.accountId,
+        input.conversationId ?? "no-conversation",
+        input.recipientPhone ?? "no-recipient",
+        String(input.startAtIndex),
+        messageId ?? "no-message",
+      ].join("|");
+
+      const hash =
+        createHash("sha256")
+          .update(stableSeed)
+          .digest("hex")
+          .slice(0, 32);
+
+      return `automation:${hash}`;
+    })(),
   };
 
   return automationSchedulerQueue.add(

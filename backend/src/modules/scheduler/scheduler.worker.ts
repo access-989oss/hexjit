@@ -16,7 +16,6 @@ import {
 import {
   SCHEDULED_JOB_TYPES,
   type FollowUpJobData,
-  type ScheduledAutomationJobData,
 } from "./scheduler.types.js";
 
 import {
@@ -45,59 +44,34 @@ async function processFollowUp(
   });
 }
 
-async function processAutomationAction(
-  job: Job<ScheduledAutomationJobData>,
-) {
-  /*
-   * The automation engine will be connected here
-   * once automation persistence and execution context
-   * are wired to the database.
-   *
-   * For now, the job is acknowledged without sending
-   * anything automatically.
-   */
-  return {
-    acknowledged: true,
-    automationId:
-      job.data.automationId,
-    action:
-      job.data.action,
-  };
-}
 
 export const schedulerWorker =
   new Worker(
     HEXJIT_SCHEDULER_QUEUE,
     async (job) => {
       switch (job.name) {
-        case "AUTOMATION_ACTION": {
-          {
-            return executeAutomationContinuation(
-              job.data as {
-                automationId: string;
-                userId: string;
-                accountId: string;
-                conversationId?: string;
-                recipientPhone?: string;
-                actions: Array<{
-                  type: string;
-                  config: Record<string, unknown>;
-                }>;
-                startAtIndex: number;
-                metadata?: Record<string, unknown>;
-              },
-            );
-          }
-        }
+        case SCHEDULED_JOB_TYPES.AUTOMATION_ACTION:
+          return executeAutomationContinuation(
+            job.data as {
+              automationId: string;
+              userId: string;
+              accountId: string;
+              conversationId?: string;
+              recipientPhone?: string;
+              actions: Array<{
+                type: string;
+                config: Record<string, unknown>;
+              }>;
+              startAtIndex: number;
+              metadata?: Record<string, unknown>;
+            },
+          );
+
         case SCHEDULED_JOB_TYPES.FOLLOW_UP:
           return processFollowUp(
             job as Job<FollowUpJobData>,
           );
 
-        case SCHEDULED_JOB_TYPES.AUTOMATION_ACTION:
-          return processAutomationAction(
-            job as Job<ScheduledAutomationJobData>,
-          );
 
         case SCHEDULED_JOB_TYPES.SYSTEM_TASK:
           return {

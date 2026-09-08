@@ -232,11 +232,11 @@ export type MessageOrderByWithRelationInput = {
 
 export type MessageWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  externalId?: string
   AND?: Prisma.MessageWhereInput | Prisma.MessageWhereInput[]
   OR?: Prisma.MessageWhereInput[]
   NOT?: Prisma.MessageWhereInput | Prisma.MessageWhereInput[]
   conversationId?: Prisma.StringFilter<"Message"> | string
-  externalId?: Prisma.StringNullableFilter<"Message"> | string | null
   direction?: Prisma.StringFilter<"Message"> | string
   messageType?: Prisma.StringFilter<"Message"> | string
   contentHash?: Prisma.StringNullableFilter<"Message"> | string | null
@@ -244,7 +244,7 @@ export type MessageWhereUniqueInput = Prisma.AtLeast<{
   processed?: Prisma.BoolFilter<"Message"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
-}, "id">
+}, "id" | "externalId">
 
 export type MessageOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

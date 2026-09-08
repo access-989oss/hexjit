@@ -304,40 +304,6 @@ export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
   _max?: Prisma.NestedJsonNullableFilter<$PrismaModel>
 }
 
-export type EnumAIProviderStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.AIProviderStatus | Prisma.EnumAIProviderStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.AIProviderStatus[] | Prisma.ListEnumAIProviderStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AIProviderStatus[] | Prisma.ListEnumAIProviderStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAIProviderStatusFilter<$PrismaModel> | $Enums.AIProviderStatus
-}
-
-export type EnumAIProviderStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.AIProviderStatus | Prisma.EnumAIProviderStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.AIProviderStatus[] | Prisma.ListEnumAIProviderStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AIProviderStatus[] | Prisma.ListEnumAIProviderStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAIProviderStatusWithAggregatesFilter<$PrismaModel> | $Enums.AIProviderStatus
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumAIProviderStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumAIProviderStatusFilter<$PrismaModel>
-}
-
-export type EnumCapabilityTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.CapabilityType | Prisma.EnumCapabilityTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.CapabilityType[] | Prisma.ListEnumCapabilityTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.CapabilityType[] | Prisma.ListEnumCapabilityTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumCapabilityTypeFilter<$PrismaModel> | $Enums.CapabilityType
-}
-
-export type EnumCapabilityTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.CapabilityType | Prisma.EnumCapabilityTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.CapabilityType[] | Prisma.ListEnumCapabilityTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.CapabilityType[] | Prisma.ListEnumCapabilityTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumCapabilityTypeWithAggregatesFilter<$PrismaModel> | $Enums.CapabilityType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumCapabilityTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumCapabilityTypeFilter<$PrismaModel>
-}
-
 export type EnumWhatsAppStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.WhatsAppStatus | Prisma.EnumWhatsAppStatusFieldRefInput<$PrismaModel>
   in?: $Enums.WhatsAppStatus[] | Prisma.ListEnumWhatsAppStatusFieldRefInput<$PrismaModel>
@@ -775,40 +741,6 @@ export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
   gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
-}
-
-export type NestedEnumAIProviderStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.AIProviderStatus | Prisma.EnumAIProviderStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.AIProviderStatus[] | Prisma.ListEnumAIProviderStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AIProviderStatus[] | Prisma.ListEnumAIProviderStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAIProviderStatusFilter<$PrismaModel> | $Enums.AIProviderStatus
-}
-
-export type NestedEnumAIProviderStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.AIProviderStatus | Prisma.EnumAIProviderStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.AIProviderStatus[] | Prisma.ListEnumAIProviderStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.AIProviderStatus[] | Prisma.ListEnumAIProviderStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumAIProviderStatusWithAggregatesFilter<$PrismaModel> | $Enums.AIProviderStatus
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumAIProviderStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumAIProviderStatusFilter<$PrismaModel>
-}
-
-export type NestedEnumCapabilityTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.CapabilityType | Prisma.EnumCapabilityTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.CapabilityType[] | Prisma.ListEnumCapabilityTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.CapabilityType[] | Prisma.ListEnumCapabilityTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumCapabilityTypeFilter<$PrismaModel> | $Enums.CapabilityType
-}
-
-export type NestedEnumCapabilityTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.CapabilityType | Prisma.EnumCapabilityTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.CapabilityType[] | Prisma.ListEnumCapabilityTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.CapabilityType[] | Prisma.ListEnumCapabilityTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumCapabilityTypeWithAggregatesFilter<$PrismaModel> | $Enums.CapabilityType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumCapabilityTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumCapabilityTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumWhatsAppStatusFilter<$PrismaModel = never> = {

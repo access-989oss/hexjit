@@ -141,6 +141,20 @@ model CreditAccount {
   isSuspended  Boolean  @default(false)
 }
 
+model CreditOperation {
+  id          String   @id @default(cuid())
+  operationId String   @unique
+  userId      String
+  capability  String
+  amount      Int
+  status      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+}
+
 model CreditLedger {
   id             String          @id @default(cuid())
   userId         String
@@ -174,56 +188,6 @@ model DailyUsage {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, usageDate])
-}
-
-model AIProvider {
-  id        String           @id @default(cuid())
-  name      String
-  slug      String           @unique
-  baseUrl   String
-  apiKeyEnc String
-  protocol  String           @default("openai-compatible")
-  status    AIProviderStatus @default(ACTIVE)
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-
-  models AIModel[]
-  routes AIRoute[]
-}
-
-model AIModel {
-  id           String           @id @default(cuid())
-  providerId   String
-  name         String
-  modelId      String
-  capabilities CapabilityType[]
-  enabled      Boolean          @default(true)
-  isFree       Boolean          @default(false)
-  metadata     Json?
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
-
-  provider AIProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
-  routes   AIRoute[]
-
-  @@unique([providerId, modelId])
-}
-
-model AIRoute {
-  id         String         @id @default(cuid())
-  capability CapabilityType
-  providerId String
-  modelId    String
-  priority   Int            @default(100)
-  enabled    Boolean        @default(true)
-  creditCost Int            @default(1)
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
-
-  provider AIProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
-  model    AIModel    @relation(fields: [modelId], references: [id], onDelete: Cascade)
-
-  @@unique([capability, priority])
 }
 
 model WhatsAppAccount {
@@ -294,7 +258,7 @@ model Conversation {
 model Message {
   id             String   @id @default(cuid())
   conversationId String
-  externalId     String?
+  externalId     String?  @unique
   direction      String
   messageType    String
   contentHash    String?
@@ -617,16 +581,17 @@ model HexjitAutomationAction {
 }
 
 model HexjitAutomationRun {
-  id           String    @id @default(cuid())
-  automationId String
-  userId       String
-  status       String    @default("RUNNING")
-  eventType    String
-  eventData    Json?
-  resultData   Json?
-  errorMessage String?
-  startedAt    DateTime  @default(now())
-  completedAt  DateTime?
+  id             String    @id @default(cuid())
+  automationId   String
+  userId         String
+  idempotencyKey String    @unique
+  status         String    @default("RUNNING")
+  eventType      String
+  eventData      Json?
+  resultData     Json?
+  errorMessage   String?
+  startedAt      DateTime  @default(now())
+  completedAt    DateTime?
 
   @@index([automationId, startedAt])
   @@index([userId, startedAt])

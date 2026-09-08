@@ -1,3 +1,4 @@
+import { processInboundMessage } from "../runtime/index.js";
 import { prisma } from "../../../lib/prisma.js";
 import {
   normalizeMetaWebhookMessages,
@@ -73,6 +74,109 @@ export async function processNormalizedMessages(
       });
 
     saved.push(record);
+
+    if (
+      !message.externalMessageId
+    ) {
+      continue;
+    }
+
+    /*
+     * Idempotency gate:
+     * - PROCESSED => already completed, never execute again.
+     * - PROCESSING => another worker/webhook owns it.
+     * - FAILED => allow retry.
+     * - RECEIVED => claim it atomically.
+     */
+    const currentStatus =
+      record.status ?? "RECEIVED";
+
+    if (
+      currentStatus === "PROCESSED" ||
+      currentStatus === "PROCESSING"
+    ) {
+      continue;
+    }
+
+    const claim =
+      await prisma.whatsAppMessage.updateMany({
+        where: {
+          externalMessageId:
+            message.externalMessageId,
+          OR: [
+            {
+              status: "RECEIVED",
+            },
+            {
+              status: "FAILED",
+            },
+            {
+              status: null,
+            },
+          ],
+        },
+        data: {
+          status: "PROCESSING",
+          updatedAt: new Date(),
+        },
+      });
+
+    if (claim.count !== 1) {
+      continue;
+    }
+
+    try {
+      await processInboundMessage(
+        message,
+      );
+
+      await prisma.whatsAppMessage.update({
+        where: {
+          externalMessageId:
+            message.externalMessageId,
+        },
+        data: {
+          status: "PROCESSED",
+        },
+      });
+    } catch (error) {
+      await prisma.whatsAppMessage.update({
+        where: {
+          externalMessageId:
+            message.externalMessageId,
+        },
+        data: {
+          status: "FAILED",
+          rawMetadata: {
+            ...(typeof record.rawMetadata === "object" &&
+            record.rawMetadata !== null
+              ? record.rawMetadata as Record<string, unknown>
+              : {}),
+            processingError:
+              error instanceof Error
+                ? error.message
+                : String(error),
+            failedAt:
+              new Date().toISOString(),
+          },
+        },
+      });
+
+      console.error(
+        "[whatsapp] inbound runtime failed",
+        {
+          accountId,
+          externalMessageId:
+            message.externalMessageId,
+          error:
+            error instanceof Error
+              ? error.message
+              : String(error),
+        },
+      );
+
+      throw error;
+    }
   }
 
   if (normalized.length > 0) {

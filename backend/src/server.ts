@@ -1,7 +1,5 @@
 import rawBody from "fastify-raw-body";
-import { registerWhatsAppAdminRoutes } from "./modules/whatsapp/admin/index.js";
 import { registerWhatsAppWebhookRoutes } from "./modules/whatsapp/index.js";
-import { registerCreditRoutes } from "./modules/credits/index.js";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
