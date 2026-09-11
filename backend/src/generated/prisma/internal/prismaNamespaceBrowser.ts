@@ -59,6 +59,7 @@ export const ModelName = {
   CreditLedger: 'CreditLedger',
   DailyUsage: 'DailyUsage',
   WhatsAppAccount: 'WhatsAppAccount',
+  WhatsAppAuthState: 'WhatsAppAuthState',
   WhatsAppContact: 'WhatsAppContact',
   WhatsAppGroup: 'WhatsAppGroup',
   Conversation: 'Conversation',
@@ -228,6 +229,18 @@ export const WhatsAppAccountScalarFieldEnum = {
 } as const
 
 export type WhatsAppAccountScalarFieldEnum = (typeof WhatsAppAccountScalarFieldEnum)[keyof typeof WhatsAppAccountScalarFieldEnum]
+
+
+export const WhatsAppAuthStateScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  stateKey: 'stateKey',
+  stateValueEnc: 'stateValueEnc',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsAppAuthStateScalarFieldEnum = (typeof WhatsAppAuthStateScalarFieldEnum)[keyof typeof WhatsAppAuthStateScalarFieldEnum]
 
 
 export const WhatsAppContactScalarFieldEnum = {

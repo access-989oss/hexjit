@@ -405,6 +405,7 @@ export const ModelName = {
   CreditLedger: 'CreditLedger',
   DailyUsage: 'DailyUsage',
   WhatsAppAccount: 'WhatsAppAccount',
+  WhatsAppAuthState: 'WhatsAppAuthState',
   WhatsAppContact: 'WhatsAppContact',
   WhatsAppGroup: 'WhatsAppGroup',
   Conversation: 'Conversation',
@@ -445,7 +446,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "adminUser" | "userEntitlement" | "creditAccount" | "creditOperation" | "creditLedger" | "dailyUsage" | "whatsAppAccount" | "whatsAppContact" | "whatsAppGroup" | "conversation" | "message" | "persona" | "contactPreference" | "memory" | "automation" | "automationRun" | "notification" | "auditLog" | "webhookEvent" | "aPIUsage" | "session" | "adminSession" | "aiProvider" | "aiModel" | "aiRoute" | "creditCost" | "whatsAppMessage" | "whatsAppWebhookEvent" | "hexjitAutomation" | "hexjitAutomationCondition" | "hexjitAutomationAction" | "hexjitAutomationRun"
+    modelProps: "user" | "adminUser" | "userEntitlement" | "creditAccount" | "creditOperation" | "creditLedger" | "dailyUsage" | "whatsAppAccount" | "whatsAppAuthState" | "whatsAppContact" | "whatsAppGroup" | "conversation" | "message" | "persona" | "contactPreference" | "memory" | "automation" | "automationRun" | "notification" | "auditLog" | "webhookEvent" | "aPIUsage" | "session" | "adminSession" | "aiProvider" | "aiModel" | "aiRoute" | "creditCost" | "whatsAppMessage" | "whatsAppWebhookEvent" | "hexjitAutomation" | "hexjitAutomationCondition" | "hexjitAutomationAction" | "hexjitAutomationRun"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1038,6 +1039,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.WhatsAppAccountCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.WhatsAppAccountCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsAppAuthState: {
+      payload: Prisma.$WhatsAppAuthStatePayload<ExtArgs>
+      fields: Prisma.WhatsAppAuthStateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsAppAuthStateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppAuthStatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsAppAuthStateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppAuthStatePayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsAppAuthStateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppAuthStatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsAppAuthStateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppAuthStatePayload>
+        }
+        findMany: {
+          args: Prisma.WhatsAppAuthStateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppAuthStatePayload>[]
+        }
+        create: {
+          args: Prisma.WhatsAppAuthStateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppAuthStatePayload>
+        }
+        createMany: {
+          args: Prisma.WhatsAppAuthStateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsAppAuthStateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppAuthStatePayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsAppAuthStateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppAuthStatePayload>
+        }
+        update: {
+          args: Prisma.WhatsAppAuthStateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppAuthStatePayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsAppAuthStateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsAppAuthStateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsAppAuthStateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppAuthStatePayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsAppAuthStateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppAuthStatePayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsAppAuthStateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsAppAuthState>
+        }
+        groupBy: {
+          args: Prisma.WhatsAppAuthStateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsAppAuthStateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsAppAuthStateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsAppAuthStateCountAggregateOutputType> | number
         }
       }
     }
@@ -3058,6 +3133,18 @@ export const WhatsAppAccountScalarFieldEnum = {
 export type WhatsAppAccountScalarFieldEnum = (typeof WhatsAppAccountScalarFieldEnum)[keyof typeof WhatsAppAccountScalarFieldEnum]
 
 
+export const WhatsAppAuthStateScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  stateKey: 'stateKey',
+  stateValueEnc: 'stateValueEnc',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsAppAuthStateScalarFieldEnum = (typeof WhatsAppAuthStateScalarFieldEnum)[keyof typeof WhatsAppAuthStateScalarFieldEnum]
+
+
 export const WhatsAppContactScalarFieldEnum = {
   id: 'id',
   accountId: 'accountId',
@@ -3850,6 +3937,7 @@ export type GlobalOmitConfig = {
   creditLedger?: Prisma.CreditLedgerOmit
   dailyUsage?: Prisma.DailyUsageOmit
   whatsAppAccount?: Prisma.WhatsAppAccountOmit
+  whatsAppAuthState?: Prisma.WhatsAppAuthStateOmit
   whatsAppContact?: Prisma.WhatsAppContactOmit
   whatsAppGroup?: Prisma.WhatsAppGroupOmit
   conversation?: Prisma.ConversationOmit

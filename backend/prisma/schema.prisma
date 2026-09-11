@@ -209,13 +209,28 @@ model WhatsAppAccount {
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
 
-  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   contacts      WhatsAppContact[]
   groups        WhatsAppGroup[]
   conversations Conversation[]
+  authStates    WhatsAppAuthState[]
 
   @@index([userId, status])
   @@index([userId, whatsappType])
+}
+
+model WhatsAppAuthState {
+  id            String   @id @default(cuid())
+  accountId     String
+  stateKey      String
+  stateValueEnc String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  account WhatsAppAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, stateKey])
+  @@index([accountId])
 }
 
 model WhatsAppContact {

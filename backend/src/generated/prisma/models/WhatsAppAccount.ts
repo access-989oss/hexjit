@@ -282,6 +282,7 @@ export type WhatsAppAccountWhereInput = {
   contacts?: Prisma.WhatsAppContactListRelationFilter
   groups?: Prisma.WhatsAppGroupListRelationFilter
   conversations?: Prisma.ConversationListRelationFilter
+  authStates?: Prisma.WhatsAppAuthStateListRelationFilter
 }
 
 export type WhatsAppAccountOrderByWithRelationInput = {
@@ -306,6 +307,7 @@ export type WhatsAppAccountOrderByWithRelationInput = {
   contacts?: Prisma.WhatsAppContactOrderByRelationAggregateInput
   groups?: Prisma.WhatsAppGroupOrderByRelationAggregateInput
   conversations?: Prisma.ConversationOrderByRelationAggregateInput
+  authStates?: Prisma.WhatsAppAuthStateOrderByRelationAggregateInput
 }
 
 export type WhatsAppAccountWhereUniqueInput = Prisma.AtLeast<{
@@ -333,6 +335,7 @@ export type WhatsAppAccountWhereUniqueInput = Prisma.AtLeast<{
   contacts?: Prisma.WhatsAppContactListRelationFilter
   groups?: Prisma.WhatsAppGroupListRelationFilter
   conversations?: Prisma.ConversationListRelationFilter
+  authStates?: Prisma.WhatsAppAuthStateListRelationFilter
 }, "id">
 
 export type WhatsAppAccountOrderByWithAggregationInput = {
@@ -402,6 +405,7 @@ export type WhatsAppAccountCreateInput = {
   contacts?: Prisma.WhatsAppContactCreateNestedManyWithoutAccountInput
   groups?: Prisma.WhatsAppGroupCreateNestedManyWithoutAccountInput
   conversations?: Prisma.ConversationCreateNestedManyWithoutAccountInput
+  authStates?: Prisma.WhatsAppAuthStateCreateNestedManyWithoutAccountInput
 }
 
 export type WhatsAppAccountUncheckedCreateInput = {
@@ -425,6 +429,7 @@ export type WhatsAppAccountUncheckedCreateInput = {
   contacts?: Prisma.WhatsAppContactUncheckedCreateNestedManyWithoutAccountInput
   groups?: Prisma.WhatsAppGroupUncheckedCreateNestedManyWithoutAccountInput
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAccountInput
+  authStates?: Prisma.WhatsAppAuthStateUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type WhatsAppAccountUpdateInput = {
@@ -448,6 +453,7 @@ export type WhatsAppAccountUpdateInput = {
   contacts?: Prisma.WhatsAppContactUpdateManyWithoutAccountNestedInput
   groups?: Prisma.WhatsAppGroupUpdateManyWithoutAccountNestedInput
   conversations?: Prisma.ConversationUpdateManyWithoutAccountNestedInput
+  authStates?: Prisma.WhatsAppAuthStateUpdateManyWithoutAccountNestedInput
 }
 
 export type WhatsAppAccountUncheckedUpdateInput = {
@@ -471,6 +477,7 @@ export type WhatsAppAccountUncheckedUpdateInput = {
   contacts?: Prisma.WhatsAppContactUncheckedUpdateManyWithoutAccountNestedInput
   groups?: Prisma.WhatsAppGroupUncheckedUpdateManyWithoutAccountNestedInput
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAccountNestedInput
+  authStates?: Prisma.WhatsAppAuthStateUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type WhatsAppAccountCreateManyInput = {
@@ -653,6 +660,20 @@ export type EnumWhatsAppStatusFieldUpdateOperationsInput = {
   set?: $Enums.WhatsAppStatus
 }
 
+export type WhatsAppAccountCreateNestedOneWithoutAuthStatesInput = {
+  create?: Prisma.XOR<Prisma.WhatsAppAccountCreateWithoutAuthStatesInput, Prisma.WhatsAppAccountUncheckedCreateWithoutAuthStatesInput>
+  connectOrCreate?: Prisma.WhatsAppAccountCreateOrConnectWithoutAuthStatesInput
+  connect?: Prisma.WhatsAppAccountWhereUniqueInput
+}
+
+export type WhatsAppAccountUpdateOneRequiredWithoutAuthStatesNestedInput = {
+  create?: Prisma.XOR<Prisma.WhatsAppAccountCreateWithoutAuthStatesInput, Prisma.WhatsAppAccountUncheckedCreateWithoutAuthStatesInput>
+  connectOrCreate?: Prisma.WhatsAppAccountCreateOrConnectWithoutAuthStatesInput
+  upsert?: Prisma.WhatsAppAccountUpsertWithoutAuthStatesInput
+  connect?: Prisma.WhatsAppAccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WhatsAppAccountUpdateToOneWithWhereWithoutAuthStatesInput, Prisma.WhatsAppAccountUpdateWithoutAuthStatesInput>, Prisma.WhatsAppAccountUncheckedUpdateWithoutAuthStatesInput>
+}
+
 export type WhatsAppAccountCreateNestedOneWithoutContactsInput = {
   create?: Prisma.XOR<Prisma.WhatsAppAccountCreateWithoutContactsInput, Prisma.WhatsAppAccountUncheckedCreateWithoutContactsInput>
   connectOrCreate?: Prisma.WhatsAppAccountCreateOrConnectWithoutContactsInput
@@ -715,6 +736,7 @@ export type WhatsAppAccountCreateWithoutUserInput = {
   contacts?: Prisma.WhatsAppContactCreateNestedManyWithoutAccountInput
   groups?: Prisma.WhatsAppGroupCreateNestedManyWithoutAccountInput
   conversations?: Prisma.ConversationCreateNestedManyWithoutAccountInput
+  authStates?: Prisma.WhatsAppAuthStateCreateNestedManyWithoutAccountInput
 }
 
 export type WhatsAppAccountUncheckedCreateWithoutUserInput = {
@@ -737,6 +759,7 @@ export type WhatsAppAccountUncheckedCreateWithoutUserInput = {
   contacts?: Prisma.WhatsAppContactUncheckedCreateNestedManyWithoutAccountInput
   groups?: Prisma.WhatsAppGroupUncheckedCreateNestedManyWithoutAccountInput
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAccountInput
+  authStates?: Prisma.WhatsAppAuthStateUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type WhatsAppAccountCreateOrConnectWithoutUserInput = {
@@ -788,6 +811,114 @@ export type WhatsAppAccountScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"WhatsAppAccount"> | Date | string
 }
 
+export type WhatsAppAccountCreateWithoutAuthStatesInput = {
+  id?: string
+  phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
+  businessId?: string | null
+  phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
+  accessTokenEnc?: string | null
+  status?: $Enums.WhatsAppStatus
+  connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutWhatsappAccountsInput
+  contacts?: Prisma.WhatsAppContactCreateNestedManyWithoutAccountInput
+  groups?: Prisma.WhatsAppGroupCreateNestedManyWithoutAccountInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAccountInput
+}
+
+export type WhatsAppAccountUncheckedCreateWithoutAuthStatesInput = {
+  id?: string
+  userId: string
+  phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
+  businessId?: string | null
+  phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
+  accessTokenEnc?: string | null
+  status?: $Enums.WhatsAppStatus
+  connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  contacts?: Prisma.WhatsAppContactUncheckedCreateNestedManyWithoutAccountInput
+  groups?: Prisma.WhatsAppGroupUncheckedCreateNestedManyWithoutAccountInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type WhatsAppAccountCreateOrConnectWithoutAuthStatesInput = {
+  where: Prisma.WhatsAppAccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.WhatsAppAccountCreateWithoutAuthStatesInput, Prisma.WhatsAppAccountUncheckedCreateWithoutAuthStatesInput>
+}
+
+export type WhatsAppAccountUpsertWithoutAuthStatesInput = {
+  update: Prisma.XOR<Prisma.WhatsAppAccountUpdateWithoutAuthStatesInput, Prisma.WhatsAppAccountUncheckedUpdateWithoutAuthStatesInput>
+  create: Prisma.XOR<Prisma.WhatsAppAccountCreateWithoutAuthStatesInput, Prisma.WhatsAppAccountUncheckedCreateWithoutAuthStatesInput>
+  where?: Prisma.WhatsAppAccountWhereInput
+}
+
+export type WhatsAppAccountUpdateToOneWithWhereWithoutAuthStatesInput = {
+  where?: Prisma.WhatsAppAccountWhereInput
+  data: Prisma.XOR<Prisma.WhatsAppAccountUpdateWithoutAuthStatesInput, Prisma.WhatsAppAccountUncheckedUpdateWithoutAuthStatesInput>
+}
+
+export type WhatsAppAccountUpdateWithoutAuthStatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
+  connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutWhatsappAccountsNestedInput
+  contacts?: Prisma.WhatsAppContactUpdateManyWithoutAccountNestedInput
+  groups?: Prisma.WhatsAppGroupUpdateManyWithoutAccountNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAccountNestedInput
+}
+
+export type WhatsAppAccountUncheckedUpdateWithoutAuthStatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
+  connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  contacts?: Prisma.WhatsAppContactUncheckedUpdateManyWithoutAccountNestedInput
+  groups?: Prisma.WhatsAppGroupUncheckedUpdateManyWithoutAccountNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAccountNestedInput
+}
+
 export type WhatsAppAccountCreateWithoutContactsInput = {
   id?: string
   phoneNumber?: string | null
@@ -808,6 +939,7 @@ export type WhatsAppAccountCreateWithoutContactsInput = {
   user: Prisma.UserCreateNestedOneWithoutWhatsappAccountsInput
   groups?: Prisma.WhatsAppGroupCreateNestedManyWithoutAccountInput
   conversations?: Prisma.ConversationCreateNestedManyWithoutAccountInput
+  authStates?: Prisma.WhatsAppAuthStateCreateNestedManyWithoutAccountInput
 }
 
 export type WhatsAppAccountUncheckedCreateWithoutContactsInput = {
@@ -830,6 +962,7 @@ export type WhatsAppAccountUncheckedCreateWithoutContactsInput = {
   updatedAt?: Date | string
   groups?: Prisma.WhatsAppGroupUncheckedCreateNestedManyWithoutAccountInput
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAccountInput
+  authStates?: Prisma.WhatsAppAuthStateUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type WhatsAppAccountCreateOrConnectWithoutContactsInput = {
@@ -868,6 +1001,7 @@ export type WhatsAppAccountUpdateWithoutContactsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutWhatsappAccountsNestedInput
   groups?: Prisma.WhatsAppGroupUpdateManyWithoutAccountNestedInput
   conversations?: Prisma.ConversationUpdateManyWithoutAccountNestedInput
+  authStates?: Prisma.WhatsAppAuthStateUpdateManyWithoutAccountNestedInput
 }
 
 export type WhatsAppAccountUncheckedUpdateWithoutContactsInput = {
@@ -890,6 +1024,7 @@ export type WhatsAppAccountUncheckedUpdateWithoutContactsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   groups?: Prisma.WhatsAppGroupUncheckedUpdateManyWithoutAccountNestedInput
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAccountNestedInput
+  authStates?: Prisma.WhatsAppAuthStateUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type WhatsAppAccountCreateWithoutGroupsInput = {
@@ -912,6 +1047,7 @@ export type WhatsAppAccountCreateWithoutGroupsInput = {
   user: Prisma.UserCreateNestedOneWithoutWhatsappAccountsInput
   contacts?: Prisma.WhatsAppContactCreateNestedManyWithoutAccountInput
   conversations?: Prisma.ConversationCreateNestedManyWithoutAccountInput
+  authStates?: Prisma.WhatsAppAuthStateCreateNestedManyWithoutAccountInput
 }
 
 export type WhatsAppAccountUncheckedCreateWithoutGroupsInput = {
@@ -934,6 +1070,7 @@ export type WhatsAppAccountUncheckedCreateWithoutGroupsInput = {
   updatedAt?: Date | string
   contacts?: Prisma.WhatsAppContactUncheckedCreateNestedManyWithoutAccountInput
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAccountInput
+  authStates?: Prisma.WhatsAppAuthStateUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type WhatsAppAccountCreateOrConnectWithoutGroupsInput = {
@@ -972,6 +1109,7 @@ export type WhatsAppAccountUpdateWithoutGroupsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutWhatsappAccountsNestedInput
   contacts?: Prisma.WhatsAppContactUpdateManyWithoutAccountNestedInput
   conversations?: Prisma.ConversationUpdateManyWithoutAccountNestedInput
+  authStates?: Prisma.WhatsAppAuthStateUpdateManyWithoutAccountNestedInput
 }
 
 export type WhatsAppAccountUncheckedUpdateWithoutGroupsInput = {
@@ -994,6 +1132,7 @@ export type WhatsAppAccountUncheckedUpdateWithoutGroupsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contacts?: Prisma.WhatsAppContactUncheckedUpdateManyWithoutAccountNestedInput
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAccountNestedInput
+  authStates?: Prisma.WhatsAppAuthStateUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type WhatsAppAccountCreateWithoutConversationsInput = {
@@ -1016,6 +1155,7 @@ export type WhatsAppAccountCreateWithoutConversationsInput = {
   user: Prisma.UserCreateNestedOneWithoutWhatsappAccountsInput
   contacts?: Prisma.WhatsAppContactCreateNestedManyWithoutAccountInput
   groups?: Prisma.WhatsAppGroupCreateNestedManyWithoutAccountInput
+  authStates?: Prisma.WhatsAppAuthStateCreateNestedManyWithoutAccountInput
 }
 
 export type WhatsAppAccountUncheckedCreateWithoutConversationsInput = {
@@ -1038,6 +1178,7 @@ export type WhatsAppAccountUncheckedCreateWithoutConversationsInput = {
   updatedAt?: Date | string
   contacts?: Prisma.WhatsAppContactUncheckedCreateNestedManyWithoutAccountInput
   groups?: Prisma.WhatsAppGroupUncheckedCreateNestedManyWithoutAccountInput
+  authStates?: Prisma.WhatsAppAuthStateUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type WhatsAppAccountCreateOrConnectWithoutConversationsInput = {
@@ -1076,6 +1217,7 @@ export type WhatsAppAccountUpdateWithoutConversationsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutWhatsappAccountsNestedInput
   contacts?: Prisma.WhatsAppContactUpdateManyWithoutAccountNestedInput
   groups?: Prisma.WhatsAppGroupUpdateManyWithoutAccountNestedInput
+  authStates?: Prisma.WhatsAppAuthStateUpdateManyWithoutAccountNestedInput
 }
 
 export type WhatsAppAccountUncheckedUpdateWithoutConversationsInput = {
@@ -1098,6 +1240,7 @@ export type WhatsAppAccountUncheckedUpdateWithoutConversationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contacts?: Prisma.WhatsAppContactUncheckedUpdateManyWithoutAccountNestedInput
   groups?: Prisma.WhatsAppGroupUncheckedUpdateManyWithoutAccountNestedInput
+  authStates?: Prisma.WhatsAppAuthStateUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type WhatsAppAccountCreateManyUserInput = {
@@ -1139,6 +1282,7 @@ export type WhatsAppAccountUpdateWithoutUserInput = {
   contacts?: Prisma.WhatsAppContactUpdateManyWithoutAccountNestedInput
   groups?: Prisma.WhatsAppGroupUpdateManyWithoutAccountNestedInput
   conversations?: Prisma.ConversationUpdateManyWithoutAccountNestedInput
+  authStates?: Prisma.WhatsAppAuthStateUpdateManyWithoutAccountNestedInput
 }
 
 export type WhatsAppAccountUncheckedUpdateWithoutUserInput = {
@@ -1161,6 +1305,7 @@ export type WhatsAppAccountUncheckedUpdateWithoutUserInput = {
   contacts?: Prisma.WhatsAppContactUncheckedUpdateManyWithoutAccountNestedInput
   groups?: Prisma.WhatsAppGroupUncheckedUpdateManyWithoutAccountNestedInput
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAccountNestedInput
+  authStates?: Prisma.WhatsAppAuthStateUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type WhatsAppAccountUncheckedUpdateManyWithoutUserInput = {
@@ -1191,12 +1336,14 @@ export type WhatsAppAccountCountOutputType = {
   contacts: number
   groups: number
   conversations: number
+  authStates: number
 }
 
 export type WhatsAppAccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   contacts?: boolean | WhatsAppAccountCountOutputTypeCountContactsArgs
   groups?: boolean | WhatsAppAccountCountOutputTypeCountGroupsArgs
   conversations?: boolean | WhatsAppAccountCountOutputTypeCountConversationsArgs
+  authStates?: boolean | WhatsAppAccountCountOutputTypeCountAuthStatesArgs
 }
 
 /**
@@ -1230,6 +1377,13 @@ export type WhatsAppAccountCountOutputTypeCountConversationsArgs<ExtArgs extends
   where?: Prisma.ConversationWhereInput
 }
 
+/**
+ * WhatsAppAccountCountOutputType without action
+ */
+export type WhatsAppAccountCountOutputTypeCountAuthStatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WhatsAppAuthStateWhereInput
+}
+
 
 export type WhatsAppAccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1253,6 +1407,7 @@ export type WhatsAppAccountSelect<ExtArgs extends runtime.Types.Extensions.Inter
   contacts?: boolean | Prisma.WhatsAppAccount$contactsArgs<ExtArgs>
   groups?: boolean | Prisma.WhatsAppAccount$groupsArgs<ExtArgs>
   conversations?: boolean | Prisma.WhatsAppAccount$conversationsArgs<ExtArgs>
+  authStates?: boolean | Prisma.WhatsAppAccount$authStatesArgs<ExtArgs>
   _count?: boolean | Prisma.WhatsAppAccountCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["whatsAppAccount"]>
 
@@ -1324,6 +1479,7 @@ export type WhatsAppAccountInclude<ExtArgs extends runtime.Types.Extensions.Inte
   contacts?: boolean | Prisma.WhatsAppAccount$contactsArgs<ExtArgs>
   groups?: boolean | Prisma.WhatsAppAccount$groupsArgs<ExtArgs>
   conversations?: boolean | Prisma.WhatsAppAccount$conversationsArgs<ExtArgs>
+  authStates?: boolean | Prisma.WhatsAppAccount$authStatesArgs<ExtArgs>
   _count?: boolean | Prisma.WhatsAppAccountCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type WhatsAppAccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1340,6 +1496,7 @@ export type $WhatsAppAccountPayload<ExtArgs extends runtime.Types.Extensions.Int
     contacts: Prisma.$WhatsAppContactPayload<ExtArgs>[]
     groups: Prisma.$WhatsAppGroupPayload<ExtArgs>[]
     conversations: Prisma.$ConversationPayload<ExtArgs>[]
+    authStates: Prisma.$WhatsAppAuthStatePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1757,6 +1914,7 @@ export interface Prisma__WhatsAppAccountClient<T, Null = never, ExtArgs extends 
   contacts<T extends Prisma.WhatsAppAccount$contactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WhatsAppAccount$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsAppContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   groups<T extends Prisma.WhatsAppAccount$groupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WhatsAppAccount$groupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsAppGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversations<T extends Prisma.WhatsAppAccount$conversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WhatsAppAccount$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  authStates<T extends Prisma.WhatsAppAccount$authStatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WhatsAppAccount$authStatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsAppAuthStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2273,6 +2431,30 @@ export type WhatsAppAccount$conversationsArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.ConversationScalarFieldEnum | Prisma.ConversationScalarFieldEnum[]
+}
+
+/**
+ * WhatsAppAccount.authStates
+ */
+export type WhatsAppAccount$authStatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WhatsAppAuthState
+   */
+  select?: Prisma.WhatsAppAuthStateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WhatsAppAuthState
+   */
+  omit?: Prisma.WhatsAppAuthStateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WhatsAppAuthStateInclude<ExtArgs> | null
+  where?: Prisma.WhatsAppAuthStateWhereInput
+  orderBy?: Prisma.WhatsAppAuthStateOrderByWithRelationInput | Prisma.WhatsAppAuthStateOrderByWithRelationInput[]
+  cursor?: Prisma.WhatsAppAuthStateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WhatsAppAuthStateScalarFieldEnum | Prisma.WhatsAppAuthStateScalarFieldEnum[]
 }
 
 /**

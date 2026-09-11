@@ -82,6 +82,11 @@ export type DailyUsage = Prisma.DailyUsageModel
  */
 export type WhatsAppAccount = Prisma.WhatsAppAccountModel
 /**
+ * Model WhatsAppAuthState
+ *
+ */
+export type WhatsAppAuthState = Prisma.WhatsAppAuthStateModel
+/**
  * Model WhatsAppContact
  *
  */
