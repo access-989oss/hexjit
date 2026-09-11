@@ -34,30 +34,26 @@ export async function getUserQrSessionStatus(
   userId: string,
   sessionId: string,
 ) {
-  const account = await prisma.whatsAppAccount.findFirst({
-    where: {
-      userId,
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  if (!account) {
-    throw new WhatsAppConnectorError(
-      "WHATSAPP_ACCOUNT_NOT_FOUND",
-      "WhatsApp account not found.",
+  const status =
+    await getWhatsAppConnector().getQrSessionStatus(
+      sessionId,
     );
-  }
 
-  const status = await getWhatsAppConnector().getQrSessionStatus(
-    sessionId,
+  const accounts =
+    await prisma.whatsAppAccount.findMany({
+      where: {
+        userId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+  const account = accounts.find((item) =>
+    status.sessionId.startsWith(`${item.id}-`),
   );
 
-  const sessionBelongsToUser =
-    status.sessionId.startsWith(`${account.id}-`);
-
-  if (!sessionBelongsToUser) {
+  if (!account) {
     throw new WhatsAppConnectorError(
       "WHATSAPP_QR_SESSION_FORBIDDEN",
       "QR session does not belong to the authenticated user.",
