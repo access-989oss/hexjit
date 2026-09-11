@@ -191,21 +191,31 @@ model DailyUsage {
 }
 
 model WhatsAppAccount {
-  id             String         @id @default(cuid())
-  userId         String
-  phoneNumber    String?
-  businessId     String?
-  phoneNumberId  String?
-  accessTokenEnc String?
-  status         WhatsAppStatus @default(DISCONNECTED)
-  connectedAt    DateTime?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  id                  String         @id @default(cuid())
+  userId              String
+  phoneNumber         String?
+  displayName         String?
+  whatsappType        String         @default("WHATSAPP")
+  businessId          String?
+  phoneNumberId       String?
+  connectorType       String         @default("UNCONFIGURED")
+  sessionReferenceEnc String?
+  accessTokenEnc      String?
+  status              WhatsAppStatus @default(DISCONNECTED)
+  connectedAt         DateTime?
+  disconnectedAt      DateTime?
+  lastSyncAt          DateTime?
+  lastError           String?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
 
   user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   contacts      WhatsAppContact[]
   groups        WhatsAppGroup[]
   conversations Conversation[]
+
+  @@index([userId, status])
+  @@index([userId, whatsappType])
 }
 
 model WhatsAppContact {

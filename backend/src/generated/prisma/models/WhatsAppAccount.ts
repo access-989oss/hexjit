@@ -28,11 +28,18 @@ export type WhatsAppAccountMinAggregateOutputType = {
   id: string | null
   userId: string | null
   phoneNumber: string | null
+  displayName: string | null
+  whatsappType: string | null
   businessId: string | null
   phoneNumberId: string | null
+  connectorType: string | null
+  sessionReferenceEnc: string | null
   accessTokenEnc: string | null
   status: $Enums.WhatsAppStatus | null
   connectedAt: Date | null
+  disconnectedAt: Date | null
+  lastSyncAt: Date | null
+  lastError: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -41,11 +48,18 @@ export type WhatsAppAccountMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   phoneNumber: string | null
+  displayName: string | null
+  whatsappType: string | null
   businessId: string | null
   phoneNumberId: string | null
+  connectorType: string | null
+  sessionReferenceEnc: string | null
   accessTokenEnc: string | null
   status: $Enums.WhatsAppStatus | null
   connectedAt: Date | null
+  disconnectedAt: Date | null
+  lastSyncAt: Date | null
+  lastError: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,11 +68,18 @@ export type WhatsAppAccountCountAggregateOutputType = {
   id: number
   userId: number
   phoneNumber: number
+  displayName: number
+  whatsappType: number
   businessId: number
   phoneNumberId: number
+  connectorType: number
+  sessionReferenceEnc: number
   accessTokenEnc: number
   status: number
   connectedAt: number
+  disconnectedAt: number
+  lastSyncAt: number
+  lastError: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -69,11 +90,18 @@ export type WhatsAppAccountMinAggregateInputType = {
   id?: true
   userId?: true
   phoneNumber?: true
+  displayName?: true
+  whatsappType?: true
   businessId?: true
   phoneNumberId?: true
+  connectorType?: true
+  sessionReferenceEnc?: true
   accessTokenEnc?: true
   status?: true
   connectedAt?: true
+  disconnectedAt?: true
+  lastSyncAt?: true
+  lastError?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,11 +110,18 @@ export type WhatsAppAccountMaxAggregateInputType = {
   id?: true
   userId?: true
   phoneNumber?: true
+  displayName?: true
+  whatsappType?: true
   businessId?: true
   phoneNumberId?: true
+  connectorType?: true
+  sessionReferenceEnc?: true
   accessTokenEnc?: true
   status?: true
   connectedAt?: true
+  disconnectedAt?: true
+  lastSyncAt?: true
+  lastError?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -95,11 +130,18 @@ export type WhatsAppAccountCountAggregateInputType = {
   id?: true
   userId?: true
   phoneNumber?: true
+  displayName?: true
+  whatsappType?: true
   businessId?: true
   phoneNumberId?: true
+  connectorType?: true
+  sessionReferenceEnc?: true
   accessTokenEnc?: true
   status?: true
   connectedAt?: true
+  disconnectedAt?: true
+  lastSyncAt?: true
+  lastError?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -181,11 +223,18 @@ export type WhatsAppAccountGroupByOutputType = {
   id: string
   userId: string
   phoneNumber: string | null
+  displayName: string | null
+  whatsappType: string
   businessId: string | null
   phoneNumberId: string | null
+  connectorType: string
+  sessionReferenceEnc: string | null
   accessTokenEnc: string | null
   status: $Enums.WhatsAppStatus
   connectedAt: Date | null
+  disconnectedAt: Date | null
+  lastSyncAt: Date | null
+  lastError: string | null
   createdAt: Date
   updatedAt: Date
   _count: WhatsAppAccountCountAggregateOutputType | null
@@ -215,11 +264,18 @@ export type WhatsAppAccountWhereInput = {
   id?: Prisma.StringFilter<"WhatsAppAccount"> | string
   userId?: Prisma.StringFilter<"WhatsAppAccount"> | string
   phoneNumber?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
+  displayName?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
+  whatsappType?: Prisma.StringFilter<"WhatsAppAccount"> | string
   businessId?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
   phoneNumberId?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
+  connectorType?: Prisma.StringFilter<"WhatsAppAccount"> | string
+  sessionReferenceEnc?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
   accessTokenEnc?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
   status?: Prisma.EnumWhatsAppStatusFilter<"WhatsAppAccount"> | $Enums.WhatsAppStatus
   connectedAt?: Prisma.DateTimeNullableFilter<"WhatsAppAccount"> | Date | string | null
+  disconnectedAt?: Prisma.DateTimeNullableFilter<"WhatsAppAccount"> | Date | string | null
+  lastSyncAt?: Prisma.DateTimeNullableFilter<"WhatsAppAccount"> | Date | string | null
+  lastError?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
   createdAt?: Prisma.DateTimeFilter<"WhatsAppAccount"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"WhatsAppAccount"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -232,11 +288,18 @@ export type WhatsAppAccountOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  displayName?: Prisma.SortOrderInput | Prisma.SortOrder
+  whatsappType?: Prisma.SortOrder
   businessId?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneNumberId?: Prisma.SortOrderInput | Prisma.SortOrder
+  connectorType?: Prisma.SortOrder
+  sessionReferenceEnc?: Prisma.SortOrderInput | Prisma.SortOrder
   accessTokenEnc?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   connectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  disconnectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastSyncAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastError?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -252,11 +315,18 @@ export type WhatsAppAccountWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.WhatsAppAccountWhereInput | Prisma.WhatsAppAccountWhereInput[]
   userId?: Prisma.StringFilter<"WhatsAppAccount"> | string
   phoneNumber?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
+  displayName?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
+  whatsappType?: Prisma.StringFilter<"WhatsAppAccount"> | string
   businessId?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
   phoneNumberId?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
+  connectorType?: Prisma.StringFilter<"WhatsAppAccount"> | string
+  sessionReferenceEnc?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
   accessTokenEnc?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
   status?: Prisma.EnumWhatsAppStatusFilter<"WhatsAppAccount"> | $Enums.WhatsAppStatus
   connectedAt?: Prisma.DateTimeNullableFilter<"WhatsAppAccount"> | Date | string | null
+  disconnectedAt?: Prisma.DateTimeNullableFilter<"WhatsAppAccount"> | Date | string | null
+  lastSyncAt?: Prisma.DateTimeNullableFilter<"WhatsAppAccount"> | Date | string | null
+  lastError?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
   createdAt?: Prisma.DateTimeFilter<"WhatsAppAccount"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"WhatsAppAccount"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -269,11 +339,18 @@ export type WhatsAppAccountOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  displayName?: Prisma.SortOrderInput | Prisma.SortOrder
+  whatsappType?: Prisma.SortOrder
   businessId?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneNumberId?: Prisma.SortOrderInput | Prisma.SortOrder
+  connectorType?: Prisma.SortOrder
+  sessionReferenceEnc?: Prisma.SortOrderInput | Prisma.SortOrder
   accessTokenEnc?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   connectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  disconnectedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastSyncAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastError?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.WhatsAppAccountCountOrderByAggregateInput
@@ -288,11 +365,18 @@ export type WhatsAppAccountScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"WhatsAppAccount"> | string
   userId?: Prisma.StringWithAggregatesFilter<"WhatsAppAccount"> | string
   phoneNumber?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppAccount"> | string | null
+  displayName?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppAccount"> | string | null
+  whatsappType?: Prisma.StringWithAggregatesFilter<"WhatsAppAccount"> | string
   businessId?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppAccount"> | string | null
   phoneNumberId?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppAccount"> | string | null
+  connectorType?: Prisma.StringWithAggregatesFilter<"WhatsAppAccount"> | string
+  sessionReferenceEnc?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppAccount"> | string | null
   accessTokenEnc?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppAccount"> | string | null
   status?: Prisma.EnumWhatsAppStatusWithAggregatesFilter<"WhatsAppAccount"> | $Enums.WhatsAppStatus
   connectedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"WhatsAppAccount"> | Date | string | null
+  disconnectedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"WhatsAppAccount"> | Date | string | null
+  lastSyncAt?: Prisma.DateTimeNullableWithAggregatesFilter<"WhatsAppAccount"> | Date | string | null
+  lastError?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppAccount"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"WhatsAppAccount"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"WhatsAppAccount"> | Date | string
 }
@@ -300,11 +384,18 @@ export type WhatsAppAccountScalarWhereWithAggregatesInput = {
 export type WhatsAppAccountCreateInput = {
   id?: string
   phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
   businessId?: string | null
   phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
   accessTokenEnc?: string | null
   status?: $Enums.WhatsAppStatus
   connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutWhatsappAccountsInput
@@ -317,11 +408,18 @@ export type WhatsAppAccountUncheckedCreateInput = {
   id?: string
   userId: string
   phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
   businessId?: string | null
   phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
   accessTokenEnc?: string | null
   status?: $Enums.WhatsAppStatus
   connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   contacts?: Prisma.WhatsAppContactUncheckedCreateNestedManyWithoutAccountInput
@@ -332,11 +430,18 @@ export type WhatsAppAccountUncheckedCreateInput = {
 export type WhatsAppAccountUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutWhatsappAccountsNestedInput
@@ -349,11 +454,18 @@ export type WhatsAppAccountUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contacts?: Prisma.WhatsAppContactUncheckedUpdateManyWithoutAccountNestedInput
@@ -365,11 +477,18 @@ export type WhatsAppAccountCreateManyInput = {
   id?: string
   userId: string
   phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
   businessId?: string | null
   phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
   accessTokenEnc?: string | null
   status?: $Enums.WhatsAppStatus
   connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -377,11 +496,18 @@ export type WhatsAppAccountCreateManyInput = {
 export type WhatsAppAccountUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -390,11 +516,18 @@ export type WhatsAppAccountUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -413,11 +546,18 @@ export type WhatsAppAccountCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
+  whatsappType?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   phoneNumberId?: Prisma.SortOrder
+  connectorType?: Prisma.SortOrder
+  sessionReferenceEnc?: Prisma.SortOrder
   accessTokenEnc?: Prisma.SortOrder
   status?: Prisma.SortOrder
   connectedAt?: Prisma.SortOrder
+  disconnectedAt?: Prisma.SortOrder
+  lastSyncAt?: Prisma.SortOrder
+  lastError?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -426,11 +566,18 @@ export type WhatsAppAccountMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
+  whatsappType?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   phoneNumberId?: Prisma.SortOrder
+  connectorType?: Prisma.SortOrder
+  sessionReferenceEnc?: Prisma.SortOrder
   accessTokenEnc?: Prisma.SortOrder
   status?: Prisma.SortOrder
   connectedAt?: Prisma.SortOrder
+  disconnectedAt?: Prisma.SortOrder
+  lastSyncAt?: Prisma.SortOrder
+  lastError?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -439,11 +586,18 @@ export type WhatsAppAccountMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  displayName?: Prisma.SortOrder
+  whatsappType?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   phoneNumberId?: Prisma.SortOrder
+  connectorType?: Prisma.SortOrder
+  sessionReferenceEnc?: Prisma.SortOrder
   accessTokenEnc?: Prisma.SortOrder
   status?: Prisma.SortOrder
   connectedAt?: Prisma.SortOrder
+  disconnectedAt?: Prisma.SortOrder
+  lastSyncAt?: Prisma.SortOrder
+  lastError?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -544,11 +698,18 @@ export type WhatsAppAccountUpdateOneRequiredWithoutConversationsNestedInput = {
 export type WhatsAppAccountCreateWithoutUserInput = {
   id?: string
   phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
   businessId?: string | null
   phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
   accessTokenEnc?: string | null
   status?: $Enums.WhatsAppStatus
   connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   contacts?: Prisma.WhatsAppContactCreateNestedManyWithoutAccountInput
@@ -559,11 +720,18 @@ export type WhatsAppAccountCreateWithoutUserInput = {
 export type WhatsAppAccountUncheckedCreateWithoutUserInput = {
   id?: string
   phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
   businessId?: string | null
   phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
   accessTokenEnc?: string | null
   status?: $Enums.WhatsAppStatus
   connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   contacts?: Prisma.WhatsAppContactUncheckedCreateNestedManyWithoutAccountInput
@@ -604,11 +772,18 @@ export type WhatsAppAccountScalarWhereInput = {
   id?: Prisma.StringFilter<"WhatsAppAccount"> | string
   userId?: Prisma.StringFilter<"WhatsAppAccount"> | string
   phoneNumber?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
+  displayName?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
+  whatsappType?: Prisma.StringFilter<"WhatsAppAccount"> | string
   businessId?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
   phoneNumberId?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
+  connectorType?: Prisma.StringFilter<"WhatsAppAccount"> | string
+  sessionReferenceEnc?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
   accessTokenEnc?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
   status?: Prisma.EnumWhatsAppStatusFilter<"WhatsAppAccount"> | $Enums.WhatsAppStatus
   connectedAt?: Prisma.DateTimeNullableFilter<"WhatsAppAccount"> | Date | string | null
+  disconnectedAt?: Prisma.DateTimeNullableFilter<"WhatsAppAccount"> | Date | string | null
+  lastSyncAt?: Prisma.DateTimeNullableFilter<"WhatsAppAccount"> | Date | string | null
+  lastError?: Prisma.StringNullableFilter<"WhatsAppAccount"> | string | null
   createdAt?: Prisma.DateTimeFilter<"WhatsAppAccount"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"WhatsAppAccount"> | Date | string
 }
@@ -616,11 +791,18 @@ export type WhatsAppAccountScalarWhereInput = {
 export type WhatsAppAccountCreateWithoutContactsInput = {
   id?: string
   phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
   businessId?: string | null
   phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
   accessTokenEnc?: string | null
   status?: $Enums.WhatsAppStatus
   connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutWhatsappAccountsInput
@@ -632,11 +814,18 @@ export type WhatsAppAccountUncheckedCreateWithoutContactsInput = {
   id?: string
   userId: string
   phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
   businessId?: string | null
   phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
   accessTokenEnc?: string | null
   status?: $Enums.WhatsAppStatus
   connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   groups?: Prisma.WhatsAppGroupUncheckedCreateNestedManyWithoutAccountInput
@@ -662,11 +851,18 @@ export type WhatsAppAccountUpdateToOneWithWhereWithoutContactsInput = {
 export type WhatsAppAccountUpdateWithoutContactsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutWhatsappAccountsNestedInput
@@ -678,11 +874,18 @@ export type WhatsAppAccountUncheckedUpdateWithoutContactsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   groups?: Prisma.WhatsAppGroupUncheckedUpdateManyWithoutAccountNestedInput
@@ -692,11 +895,18 @@ export type WhatsAppAccountUncheckedUpdateWithoutContactsInput = {
 export type WhatsAppAccountCreateWithoutGroupsInput = {
   id?: string
   phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
   businessId?: string | null
   phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
   accessTokenEnc?: string | null
   status?: $Enums.WhatsAppStatus
   connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutWhatsappAccountsInput
@@ -708,11 +918,18 @@ export type WhatsAppAccountUncheckedCreateWithoutGroupsInput = {
   id?: string
   userId: string
   phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
   businessId?: string | null
   phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
   accessTokenEnc?: string | null
   status?: $Enums.WhatsAppStatus
   connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   contacts?: Prisma.WhatsAppContactUncheckedCreateNestedManyWithoutAccountInput
@@ -738,11 +955,18 @@ export type WhatsAppAccountUpdateToOneWithWhereWithoutGroupsInput = {
 export type WhatsAppAccountUpdateWithoutGroupsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutWhatsappAccountsNestedInput
@@ -754,11 +978,18 @@ export type WhatsAppAccountUncheckedUpdateWithoutGroupsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contacts?: Prisma.WhatsAppContactUncheckedUpdateManyWithoutAccountNestedInput
@@ -768,11 +999,18 @@ export type WhatsAppAccountUncheckedUpdateWithoutGroupsInput = {
 export type WhatsAppAccountCreateWithoutConversationsInput = {
   id?: string
   phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
   businessId?: string | null
   phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
   accessTokenEnc?: string | null
   status?: $Enums.WhatsAppStatus
   connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutWhatsappAccountsInput
@@ -784,11 +1022,18 @@ export type WhatsAppAccountUncheckedCreateWithoutConversationsInput = {
   id?: string
   userId: string
   phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
   businessId?: string | null
   phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
   accessTokenEnc?: string | null
   status?: $Enums.WhatsAppStatus
   connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   contacts?: Prisma.WhatsAppContactUncheckedCreateNestedManyWithoutAccountInput
@@ -814,11 +1059,18 @@ export type WhatsAppAccountUpdateToOneWithWhereWithoutConversationsInput = {
 export type WhatsAppAccountUpdateWithoutConversationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutWhatsappAccountsNestedInput
@@ -830,11 +1082,18 @@ export type WhatsAppAccountUncheckedUpdateWithoutConversationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contacts?: Prisma.WhatsAppContactUncheckedUpdateManyWithoutAccountNestedInput
@@ -844,11 +1103,18 @@ export type WhatsAppAccountUncheckedUpdateWithoutConversationsInput = {
 export type WhatsAppAccountCreateManyUserInput = {
   id?: string
   phoneNumber?: string | null
+  displayName?: string | null
+  whatsappType?: string
   businessId?: string | null
   phoneNumberId?: string | null
+  connectorType?: string
+  sessionReferenceEnc?: string | null
   accessTokenEnc?: string | null
   status?: $Enums.WhatsAppStatus
   connectedAt?: Date | string | null
+  disconnectedAt?: Date | string | null
+  lastSyncAt?: Date | string | null
+  lastError?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -856,11 +1122,18 @@ export type WhatsAppAccountCreateManyUserInput = {
 export type WhatsAppAccountUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contacts?: Prisma.WhatsAppContactUpdateManyWithoutAccountNestedInput
@@ -871,11 +1144,18 @@ export type WhatsAppAccountUpdateWithoutUserInput = {
 export type WhatsAppAccountUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   contacts?: Prisma.WhatsAppContactUncheckedUpdateManyWithoutAccountNestedInput
@@ -886,11 +1166,18 @@ export type WhatsAppAccountUncheckedUpdateWithoutUserInput = {
 export type WhatsAppAccountUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumberId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  connectorType?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionReferenceEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessTokenEnc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumWhatsAppStatusFieldUpdateOperationsInput | $Enums.WhatsAppStatus
   connectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  disconnectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSyncAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -948,11 +1235,18 @@ export type WhatsAppAccountSelect<ExtArgs extends runtime.Types.Extensions.Inter
   id?: boolean
   userId?: boolean
   phoneNumber?: boolean
+  displayName?: boolean
+  whatsappType?: boolean
   businessId?: boolean
   phoneNumberId?: boolean
+  connectorType?: boolean
+  sessionReferenceEnc?: boolean
   accessTokenEnc?: boolean
   status?: boolean
   connectedAt?: boolean
+  disconnectedAt?: boolean
+  lastSyncAt?: boolean
+  lastError?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -966,11 +1260,18 @@ export type WhatsAppAccountSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   userId?: boolean
   phoneNumber?: boolean
+  displayName?: boolean
+  whatsappType?: boolean
   businessId?: boolean
   phoneNumberId?: boolean
+  connectorType?: boolean
+  sessionReferenceEnc?: boolean
   accessTokenEnc?: boolean
   status?: boolean
   connectedAt?: boolean
+  disconnectedAt?: boolean
+  lastSyncAt?: boolean
+  lastError?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -980,11 +1281,18 @@ export type WhatsAppAccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   userId?: boolean
   phoneNumber?: boolean
+  displayName?: boolean
+  whatsappType?: boolean
   businessId?: boolean
   phoneNumberId?: boolean
+  connectorType?: boolean
+  sessionReferenceEnc?: boolean
   accessTokenEnc?: boolean
   status?: boolean
   connectedAt?: boolean
+  disconnectedAt?: boolean
+  lastSyncAt?: boolean
+  lastError?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -994,16 +1302,23 @@ export type WhatsAppAccountSelectScalar = {
   id?: boolean
   userId?: boolean
   phoneNumber?: boolean
+  displayName?: boolean
+  whatsappType?: boolean
   businessId?: boolean
   phoneNumberId?: boolean
+  connectorType?: boolean
+  sessionReferenceEnc?: boolean
   accessTokenEnc?: boolean
   status?: boolean
   connectedAt?: boolean
+  disconnectedAt?: boolean
+  lastSyncAt?: boolean
+  lastError?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type WhatsAppAccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "phoneNumber" | "businessId" | "phoneNumberId" | "accessTokenEnc" | "status" | "connectedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["whatsAppAccount"]>
+export type WhatsAppAccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "phoneNumber" | "displayName" | "whatsappType" | "businessId" | "phoneNumberId" | "connectorType" | "sessionReferenceEnc" | "accessTokenEnc" | "status" | "connectedAt" | "disconnectedAt" | "lastSyncAt" | "lastError" | "createdAt" | "updatedAt", ExtArgs["result"]["whatsAppAccount"]>
 export type WhatsAppAccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   contacts?: boolean | Prisma.WhatsAppAccount$contactsArgs<ExtArgs>
@@ -1030,11 +1345,18 @@ export type $WhatsAppAccountPayload<ExtArgs extends runtime.Types.Extensions.Int
     id: string
     userId: string
     phoneNumber: string | null
+    displayName: string | null
+    whatsappType: string
     businessId: string | null
     phoneNumberId: string | null
+    connectorType: string
+    sessionReferenceEnc: string | null
     accessTokenEnc: string | null
     status: $Enums.WhatsAppStatus
     connectedAt: Date | null
+    disconnectedAt: Date | null
+    lastSyncAt: Date | null
+    lastError: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["whatsAppAccount"]>
@@ -1467,11 +1789,18 @@ export interface WhatsAppAccountFieldRefs {
   readonly id: Prisma.FieldRef<"WhatsAppAccount", 'String'>
   readonly userId: Prisma.FieldRef<"WhatsAppAccount", 'String'>
   readonly phoneNumber: Prisma.FieldRef<"WhatsAppAccount", 'String'>
+  readonly displayName: Prisma.FieldRef<"WhatsAppAccount", 'String'>
+  readonly whatsappType: Prisma.FieldRef<"WhatsAppAccount", 'String'>
   readonly businessId: Prisma.FieldRef<"WhatsAppAccount", 'String'>
   readonly phoneNumberId: Prisma.FieldRef<"WhatsAppAccount", 'String'>
+  readonly connectorType: Prisma.FieldRef<"WhatsAppAccount", 'String'>
+  readonly sessionReferenceEnc: Prisma.FieldRef<"WhatsAppAccount", 'String'>
   readonly accessTokenEnc: Prisma.FieldRef<"WhatsAppAccount", 'String'>
   readonly status: Prisma.FieldRef<"WhatsAppAccount", 'WhatsAppStatus'>
   readonly connectedAt: Prisma.FieldRef<"WhatsAppAccount", 'DateTime'>
+  readonly disconnectedAt: Prisma.FieldRef<"WhatsAppAccount", 'DateTime'>
+  readonly lastSyncAt: Prisma.FieldRef<"WhatsAppAccount", 'DateTime'>
+  readonly lastError: Prisma.FieldRef<"WhatsAppAccount", 'String'>
   readonly createdAt: Prisma.FieldRef<"WhatsAppAccount", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"WhatsAppAccount", 'DateTime'>
 }

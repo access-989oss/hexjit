@@ -3039,11 +3039,18 @@ export const WhatsAppAccountScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   phoneNumber: 'phoneNumber',
+  displayName: 'displayName',
+  whatsappType: 'whatsappType',
   businessId: 'businessId',
   phoneNumberId: 'phoneNumberId',
+  connectorType: 'connectorType',
+  sessionReferenceEnc: 'sessionReferenceEnc',
   accessTokenEnc: 'accessTokenEnc',
   status: 'status',
   connectedAt: 'connectedAt',
+  disconnectedAt: 'disconnectedAt',
+  lastSyncAt: 'lastSyncAt',
+  lastError: 'lastError',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

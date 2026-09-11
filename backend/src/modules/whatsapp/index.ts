@@ -1,3 +1,4 @@
+export { getWhatsAppConnector, setWhatsAppConnector } from "./connector/whatsapp-connector.factory.js";
 export {
   listWhatsAppAccounts,
   createWhatsAppAccount,
