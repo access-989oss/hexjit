@@ -41,6 +41,13 @@ export class UnconfiguredWhatsAppConnector implements WhatsAppConnector {
     return notConfigured();
   }
 
+  async restoreSession(
+    _accountId: string,
+    _userId: string,
+  ): Promise<void> {
+    return notConfigured();
+  }
+
   async disconnect(_accountId: string): Promise<void> {
     return notConfigured();
   }

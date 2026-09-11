@@ -56,6 +56,11 @@ export interface WhatsAppConnector {
     accountId: string,
   ): Promise<WhatsAppAccountInfo | null>;
 
+  restoreSession(
+    accountId: string,
+    userId: string,
+  ): Promise<void>;
+
   disconnect(
     accountId: string,
   ): Promise<void>;

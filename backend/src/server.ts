@@ -4,6 +4,8 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import rateLimit from "@fastify/rate-limit";
+import { restoreWhatsAppSessions } from "./modules/whatsapp/connector/baileys-session-manager.js";
+import { getWhatsAppConnector } from "./modules/whatsapp/connector/whatsapp-connector.factory.js";
 
 import { env } from "./config/env.js";
 import { prisma } from "./lib/prisma.js";
@@ -97,7 +99,9 @@ process.on("SIGINT", () => void shutdown("SIGINT"));
 try {
   await registerWhatsAppWebhookRoutes(app);
 
-  await app.listen({
+    await restoreWhatsAppSessions(getWhatsAppConnector());
+
+await app.listen({
     host: env.server.host,
     port: env.server.port,
   });

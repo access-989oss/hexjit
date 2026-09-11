@@ -6,6 +6,7 @@ import { adminAuthRoutes } from "../modules/admin-auth/admin-auth.routes.js";
 import { adminMeRoutes } from "../modules/admin-auth/admin-me.routes.js";
 import { aiRoutes } from "../modules/ai/index.js";
 import { registerWhatsAppAdminRoutes } from "../modules/whatsapp/admin/index.js";
+import { registerWhatsAppConnectionRoutes } from "../modules/whatsapp/connector/whatsapp-connection.routes.js";
 import { registerCreditRoutes } from "../modules/credits/index.js";
 
 export async function apiRoutes(
@@ -18,5 +19,6 @@ export async function apiRoutes(
   await app.register(adminMeRoutes);
   await app.register(aiRoutes);
   await app.register(registerWhatsAppAdminRoutes);
+  await app.register(registerWhatsAppConnectionRoutes);
   await app.register(registerCreditRoutes);
 }
