@@ -1,20 +1,21 @@
 import type { FastifyInstance } from "fastify";
 import { getCreditAccount } from "./credit.service.js";
-
-type AuthenticatedRequest = {
-  user?: {
-    id: string;
-  };
-};
+import {
+  requireAuth,
+  type AuthenticatedRequest,
+} from "../../middleware/auth.js";
 
 export async function registerCreditRoutes(
   app: FastifyInstance,
 ) {
   app.get(
     "/credits",
+    {
+      preHandler: requireAuth,
+    },
     async (request, reply) => {
       const userId =
-        (request as AuthenticatedRequest).user?.id;
+        (request as AuthenticatedRequest).auth?.userId;
 
       if (!userId) {
         return reply.code(401).send({

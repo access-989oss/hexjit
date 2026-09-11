@@ -61,8 +61,11 @@ export type CapabilityType = (typeof CapabilityType)[keyof typeof CapabilityType
 export const WhatsAppStatus = {
   DISCONNECTED: 'DISCONNECTED',
   CONNECTING: 'CONNECTING',
+  QR_REQUIRED: 'QR_REQUIRED',
   CONNECTED: 'CONNECTED',
-  ERROR: 'ERROR'
+  RECONNECTING: 'RECONNECTING',
+  ERROR: 'ERROR',
+  REVOKED: 'REVOKED'
 } as const
 
 export type WhatsAppStatus = (typeof WhatsAppStatus)[keyof typeof WhatsAppStatus]

@@ -1,11 +1,20 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { findUserById } from "./user.service.js";
+import {
+  requireAuth,
+  type AuthenticatedRequest,
+} from "../../middleware/auth.js";
 
 const idSchema = z.string().min(1);
 
 export async function userRoutes(app: FastifyInstance) {
-  app.get("/users/:id", async (request, reply) => {
+  app.get(
+    "/users/:id",
+    {
+      preHandler: requireAuth,
+    },
+    async (request, reply) => {
     const parsed = idSchema.safeParse(
       (request.params as { id?: unknown }).id,
     );
@@ -14,6 +23,23 @@ export async function userRoutes(app: FastifyInstance) {
       return reply.code(400).send({
         success: false,
         error: "INVALID_USER_ID",
+      });
+    }
+
+    const auth =
+      (request as AuthenticatedRequest).auth;
+
+    if (!auth) {
+      return reply.code(401).send({
+        success: false,
+        error: "AUTHENTICATION_REQUIRED",
+      });
+    }
+
+    if (auth.userId !== parsed.data) {
+      return reply.code(403).send({
+        success: false,
+        error: "FORBIDDEN",
       });
     }
 

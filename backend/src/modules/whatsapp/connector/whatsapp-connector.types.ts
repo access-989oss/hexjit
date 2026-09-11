@@ -13,6 +13,7 @@ export type WhatsAppConnectionStatus =
 
 export interface WhatsAppQrSession {
   sessionId: string;
+  accountId?: string;
   status: WhatsAppConnectionStatus;
   qrCode?: string | null;
   expiresAt?: Date | null;
@@ -43,6 +44,17 @@ export interface WhatsAppConnector {
   createQrSession(
     input: CreateQrSessionInput,
   ): Promise<WhatsAppQrSession>;
+
+  requestPairingCode(input: {
+    userId: string;
+    phoneNumber: string;
+    accountId?: string;
+  }): Promise<{
+    sessionId: string;
+    accountId: string;
+    code: string;
+    expiresAt?: Date | null;
+  }>;
 
   getQrSessionStatus(
     sessionId: string,

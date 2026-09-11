@@ -30,6 +30,36 @@ export async function createUserQrSession(userId: string) {
   };
 }
 
+export async function requestUserPairingCode(
+  userId: string,
+  phoneNumber: string,
+) {
+  const account = await prisma.whatsAppAccount.findFirst({
+    where: {
+      userId,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  const session =
+    await getWhatsAppConnector().requestPairingCode({
+      userId,
+      phoneNumber,
+      accountId: account?.id,
+    });
+
+  return {
+    sessionId: session.sessionId,
+    code: session.code,
+    expiresAt: session.expiresAt ?? null,
+  };
+}
+
 export async function getUserQrSessionStatus(
   userId: string,
   sessionId: string,

@@ -44,8 +44,11 @@ enum CapabilityType {
 enum WhatsAppStatus {
   DISCONNECTED
   CONNECTING
+  QR_REQUIRED
   CONNECTED
+  RECONNECTING
   ERROR
+  REVOKED
 }
 
 enum AutomationStatus {

@@ -8,6 +8,7 @@ import { requireAuth } from "../../../middleware/auth.js";
 import { WhatsAppConnectorError } from "./whatsapp-connector.error.js";
 import {
   createUserQrSession,
+  requestUserPairingCode,
   getUserQrSessionStatus,
   getUserWhatsAppStatus,
   disconnectUserWhatsApp,
@@ -16,6 +17,15 @@ import {
 
 const qrSessionQuerySchema = z.object({
   sessionId: z.string().min(1).max(200),
+});
+
+const pairingCodeBodySchema = z.object({
+  phoneNumber: z
+    .string()
+    .trim()
+    .min(8)
+    .max(30)
+    .regex(/^[+0-9()\s-]+$/),
 });
 
 function userIdFromRequest(request: FastifyRequest): string {
@@ -101,6 +111,48 @@ export async function registerWhatsAppConnectionRoutes(
         };
       } catch (error) {
         return sendConnectorError(error, reply);
+      }
+    },
+  );
+
+  app.post(
+    "/whatsapp/pairing-code",
+    {
+      preHandler: requireAuth,
+    },
+    async (request, reply) => {
+      const parsed =
+        pairingCodeBodySchema.safeParse(
+          request.body,
+        );
+
+      if (!parsed.success) {
+        return reply.code(400).send({
+          success: false,
+          error: {
+            code: "INVALID_WHATSAPP_PHONE_NUMBER",
+            message:
+              "A valid WhatsApp phone number is required.",
+          },
+        });
+      }
+
+      try {
+        const result =
+          await requestUserPairingCode(
+            userIdFromRequest(request),
+            parsed.data.phoneNumber,
+          );
+
+        return {
+          success: true,
+          data: result,
+        };
+      } catch (error) {
+        return sendConnectorError(
+          error,
+          reply,
+        );
       }
     },
   );

@@ -1,6 +1,7 @@
 import makeWASocket, {
   Browsers,
   DisconnectReason,
+  fetchLatestWaWebVersion,
   type WASocket,
   type AuthenticationCreds,
 } from "@whiskeysockets/baileys";
@@ -16,6 +17,7 @@ import type {
   WhatsAppConnectorStatus,
   WhatsAppQrSession,
 } from "./whatsapp-connector.types.js";
+import { processInboundMessage } from "../runtime/index.js";
 
 type RuntimeSession = {
   accountId: string;
@@ -23,11 +25,177 @@ type RuntimeSession = {
   socket: WASocket;
   status: WhatsAppConnectionStatus;
   qrCode?: string | null;
+  qrExpiresAt?: Date | null;
+  qrTimer?: NodeJS.Timeout;
   reconnectTimer?: NodeJS.Timeout;
   reconnectAttempts: number;
 };
 
 const sessions = new Map<string, RuntimeSession>();
+
+function normalizeBaileysNumber(jid?: string | null): string | undefined {
+  if (!jid) {
+    return undefined;
+  }
+
+  const bare = jid.split(":")[0].split("@")[0];
+
+  if (!bare || !/^\d+$/.test(bare)) {
+    return undefined;
+  }
+
+  return bare;
+}
+
+function normalizeBaileysMessage(message: any, accountId: string) {
+  const key = message?.key;
+  const remoteJid = key?.remoteJid as string | undefined;
+  const participant =
+    key?.participant as string | undefined;
+
+  const fromJid =
+    remoteJid?.endsWith("@g.us")
+      ? participant ?? remoteJid
+      : remoteJid;
+
+  const fromNumber =
+    normalizeBaileysNumber(fromJid);
+
+  const toNumber =
+    normalizeBaileysNumber(key?.participantAlt) ??
+    undefined;
+
+  const content =
+    message?.message ?? {};
+
+  let type:
+    | "text"
+    | "image"
+    | "audio"
+    | "video"
+    | "document"
+    | "sticker"
+    | "location"
+    | "reaction"
+    | "unknown" = "unknown";
+
+  let text: string | undefined;
+  let caption: string | undefined;
+  let mimeType: string | undefined;
+  let fileName: string | undefined;
+  let latitude: number | undefined;
+  let longitude: number | undefined;
+
+  if (content.conversation) {
+    type = "text";
+    text = content.conversation;
+  } else if (content.extendedTextMessage) {
+    type = "text";
+    text =
+      content.extendedTextMessage.text ??
+      undefined;
+  } else if (content.imageMessage) {
+    type = "image";
+    caption =
+      content.imageMessage.caption ??
+      undefined;
+    text = caption;
+    mimeType =
+      content.imageMessage.mimetype ??
+      undefined;
+  } else if (content.audioMessage) {
+    type = "audio";
+    mimeType =
+      content.audioMessage.mimetype ??
+      undefined;
+  } else if (content.videoMessage) {
+    type = "video";
+    caption =
+      content.videoMessage.caption ??
+      undefined;
+    text = caption;
+    mimeType =
+      content.videoMessage.mimetype ??
+      undefined;
+  } else if (content.documentMessage) {
+    type = "document";
+    text =
+      content.documentMessage.caption ??
+      undefined;
+    mimeType =
+      content.documentMessage.mimetype ??
+      undefined;
+    fileName =
+      content.documentMessage.fileName ??
+      undefined;
+  } else if (content.stickerMessage) {
+    type = "sticker";
+    mimeType =
+      content.stickerMessage.mimetype ??
+      undefined;
+  } else if (content.locationMessage) {
+    type = "location";
+    latitude =
+      typeof content.locationMessage.degreesLatitude === "number"
+        ? content.locationMessage.degreesLatitude
+        : undefined;
+    longitude =
+      typeof content.locationMessage.degreesLongitude === "number"
+        ? content.locationMessage.degreesLongitude
+        : undefined;
+  } else if (content.reactionMessage) {
+    type = "reaction";
+    text =
+      content.reactionMessage.text ??
+      undefined;
+  }
+
+  return {
+    externalMessageId:
+      String(key?.id ?? ""),
+    accountId,
+    fromNumber,
+    toNumber,
+    type,
+    text,
+    mimeType,
+    fileName,
+    latitude,
+    longitude,
+    caption,
+    timestamp:
+      message?.messageTimestamp != null
+        ? String(message.messageTimestamp)
+        : undefined,
+    raw: message,
+  };
+}
+
+const startingAccounts = new Set<string>();
+
+function cleanupRuntimeSession(
+  accountId: string,
+): void {
+  const runtime = sessions.get(accountId);
+
+  if (!runtime) {
+    return;
+  }
+
+  clearTimeout(runtime.qrTimer);
+  clearTimeout(runtime.reconnectTimer);
+
+  runtime.qrTimer = undefined;
+  runtime.reconnectTimer = undefined;
+
+  sessions.delete(accountId);
+
+  try {
+    runtime.socket.ws.close();
+  } catch {
+    // Socket may already be closed.
+  }
+}
 
 function disconnectCode(error: unknown): number | undefined {
   return (error instanceof Boom
@@ -47,6 +215,7 @@ function accountInfoFromSocket(
   socket: WASocket,
 ): WhatsAppAccountInfo | null {
   const jid = socket.user?.id;
+
   if (!jid) {
     return null;
   }
@@ -61,9 +230,34 @@ function accountInfoFromSocket(
   return {
     phoneNumber,
     displayName: socket.user?.name ?? null,
+    // The actual Business/Normal classification is resolved
+    // after connection using the account profile.
     whatsappType: "WHATSAPP",
     externalAccountId: jid,
   };
+}
+
+async function detectWhatsAppType(
+  socket: WASocket,
+): Promise<"WHATSAPP" | "WHATSAPP_BUSINESS"> {
+  const jid = socket.user?.id;
+
+  if (!jid) {
+    return "WHATSAPP";
+  }
+
+  try {
+    const profile = await socket.getBusinessProfile(jid);
+
+    if (profile) {
+      return "WHATSAPP_BUSINESS";
+    }
+  } catch {
+    // A missing/unavailable business profile does not mean
+    // the WhatsApp account is broken. Treat it as normal WhatsApp.
+  }
+
+  return "WHATSAPP";
 }
 
 export class BaileysWhatsAppConnector implements WhatsAppConnector {
@@ -90,8 +284,10 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
     if (existing) {
       return {
         sessionId: existing.sessionId,
+        accountId: existing.accountId,
         status: existing.status,
         qrCode: existing.qrCode ?? null,
+        expiresAt: existing.qrExpiresAt ?? null,
       };
     }
 
@@ -117,9 +313,213 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
 
     return {
       sessionId,
+      accountId,
       status: runtime?.status ?? "CONNECTING",
       qrCode: runtime?.qrCode ?? null,
+      expiresAt: runtime?.qrExpiresAt ?? null,
     };
+  }
+
+  async requestPairingCode(input: {
+    userId: string;
+    phoneNumber: string;
+    accountId?: string;
+  }): Promise<{
+    sessionId: string;
+    accountId: string;
+    code: string;
+    expiresAt?: Date | null;
+  }> {
+    const phoneNumber = input.phoneNumber.replace(/\\D/g, "");
+
+    if (!phoneNumber || phoneNumber.length < 8 || phoneNumber.length > 15) {
+      throw new WhatsAppConnectorError(
+        "INVALID_WHATSAPP_PHONE_NUMBER",
+        "Invalid WhatsApp phone number.",
+      );
+    }
+
+    const accountId =
+      input.accountId ??
+      (
+        await prisma.whatsAppAccount.create({
+          data: {
+            userId: input.userId,
+            connectorType: "BAILEYS",
+            status: "CONNECTING",
+          },
+          select: { id: true },
+        })
+      ).id;
+
+    const existing = sessions.get(accountId);
+
+    if (existing) {
+      if (existing.status === "CONNECTED") {
+        throw new WhatsAppConnectorError(
+          "WHATSAPP_ALREADY_CONNECTED",
+          "WhatsApp is already connected.",
+        );
+      }
+
+      cleanupRuntimeSession(accountId);
+    }
+
+    const sessionId =
+      `${accountId}-${Date.now().toString(36)}`;
+
+    await prisma.whatsAppAccount.update({
+      where: { id: accountId },
+      data: {
+        connectorType: "BAILEYS",
+        status: "CONNECTING",
+        lastError: null,
+      },
+    });
+
+    const authState =
+      await this.authStore.getState(accountId);
+
+    const { version } =
+      await fetchLatestWaWebVersion({});
+
+    const runtime: RuntimeSession = {
+      accountId,
+      sessionId,
+      socket: null as unknown as WASocket,
+      status: "CONNECTING",
+      qrCode: null,
+      reconnectAttempts: 0,
+    };
+
+    const socket = makeWASocket({
+      version,
+      auth: authState,
+      browser: Browsers.ubuntu("Chrome"),
+      printQRInTerminal: false,
+      syncFullHistory: false,
+      markOnlineOnConnect: false,
+      connectTimeoutMs: 30_000,
+      keepAliveIntervalMs: 15_000,
+      defaultQueryTimeoutMs: 60_000,
+      generateHighQualityLinkPreview: false,
+      getMessage: async () => undefined,
+    });
+
+    runtime.socket = socket;
+    sessions.set(accountId, runtime);
+
+    socket.ev.on(
+      "creds.update",
+      async () => {
+        try {
+          await this.authStore.saveCreds(
+            accountId,
+            authState.creds,
+          );
+        } catch (error) {
+          console.error(
+            "[whatsapp] creds.update save failed",
+            {
+              accountId,
+              error:
+                error instanceof Error
+                  ? error.message
+                  : "unknown",
+            },
+          );
+        }
+      },
+    );
+
+    socket.ev.on(
+      "connection.update",
+      async (update) => {
+        const {
+          connection,
+          lastDisconnect,
+          qr,
+        } = update;
+
+        const current = sessions.get(accountId);
+
+        if (!current) {
+          return;
+        }
+
+        if (qr && !current.qrCode) {
+          current.qrCode = qr;
+        }
+
+        if (connection === "open") {
+          current.status = "CONNECTED";
+          current.qrCode = null;
+          current.reconnectAttempts = 0;
+
+          const info =
+            accountInfoFromSocket(socket);
+
+          const whatsappType =
+            await detectWhatsAppType(socket);
+
+          await prisma.whatsAppAccount.update({
+            where: { id: accountId },
+            data: {
+              status: "CONNECTED",
+              phoneNumber:
+                info?.phoneNumber ?? phoneNumber,
+              displayName:
+                info?.displayName ?? undefined,
+              whatsappType,
+              connectedAt: new Date(),
+              disconnectedAt: null,
+              lastSyncAt: new Date(),
+              lastError: null,
+              connectorType: "BAILEYS",
+            },
+          });
+        }
+      },
+    );
+
+    startingAccounts.delete(accountId);
+
+    try {
+      const code =
+        await socket.requestPairingCode(phoneNumber);
+
+      const expiresAt =
+        new Date(Date.now() + 60_000);
+
+      runtime.qrExpiresAt = expiresAt;
+
+      return {
+        sessionId,
+        accountId,
+        code,
+        expiresAt,
+      };
+    } catch (error) {
+      cleanupRuntimeSession(accountId);
+
+      await prisma.whatsAppAccount.update({
+        where: { id: accountId },
+        data: {
+          status: "ERROR",
+          lastError:
+            error instanceof Error
+              ? error.message
+              : "Pairing code request failed.",
+        },
+      });
+
+      throw new WhatsAppConnectorError(
+        "WHATSAPP_PAIRING_CODE_FAILED",
+        error instanceof Error
+          ? error.message
+          : "Failed to generate WhatsApp pairing code.",
+      );
+    }
   }
 
   async getQrSessionStatus(
@@ -312,8 +712,10 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
     if (existing) {
       return {
         sessionId: existing.sessionId,
+        accountId: existing.accountId,
         status: existing.status,
         qrCode: existing.qrCode ?? null,
+        expiresAt: existing.qrExpiresAt ?? null,
       };
     }
 
@@ -330,8 +732,10 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
 
     return {
       sessionId,
+      accountId,
       status: runtime?.status ?? "RECONNECTING",
       qrCode: runtime?.qrCode ?? null,
+      expiresAt: runtime?.qrExpiresAt ?? null,
     };
   }
 
@@ -430,8 +834,62 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
     userId: string,
     sessionId: string,
   ): Promise<void> {
+    if (startingAccounts.has(accountId)) {
+      return;
+    }
+
+    startingAccounts.add(accountId);
+
+    const existing = sessions.get(accountId);
+
+    if (existing) {
+      clearTimeout(existing.qrTimer);
+      clearTimeout(existing.reconnectTimer);
+
+      existing.qrTimer = undefined;
+      existing.reconnectTimer = undefined;
+
+      sessions.delete(accountId);
+
+      try {
+        existing.socket.ws.close();
+      } catch {
+        // Socket may already be closed.
+      }
+    }
+
     const authState =
       await this.authStore.getState(accountId);
+
+    let version: [number, number, number];
+
+    try {
+      const latest = await fetchLatestWaWebVersion({});
+      version = latest.version;
+
+      console.log(
+        JSON.stringify({
+          event: "whatsapp.wa_web_version",
+          version: version.join("."),
+          isLatest: latest.isLatest,
+        }),
+      );
+    } catch (error) {
+      console.warn(
+        JSON.stringify({
+          event: "whatsapp.wa_web_version_fetch_failed",
+          error:
+            error instanceof Error
+              ? error.message
+              : "unknown",
+        }),
+      );
+
+      throw new WhatsAppConnectorError(
+        "WHATSAPP_WEB_VERSION_UNAVAILABLE",
+        "Unable to resolve the current WhatsApp Web version.",
+      );
+    }
 
     const runtime: RuntimeSession = {
       accountId,
@@ -443,11 +901,17 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
     };
 
     const socket = makeWASocket({
+      version,
       auth: authState,
-      browser: Browsers.ubuntu("Hexjit"),
+      browser: Browsers.ubuntu("Chrome"),
       printQRInTerminal: false,
       syncFullHistory: false,
       markOnlineOnConnect: false,
+      connectTimeoutMs: 30_000,
+      keepAliveIntervalMs: 15_000,
+      defaultQueryTimeoutMs: 60_000,
+      generateHighQualityLinkPreview: false,
+      getMessage: async () => undefined,
     });
 
     runtime.socket = socket;
@@ -455,19 +919,24 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
 
     socket.ev.on(
       "creds.update",
-      async (update) => {
-        const current =
-          await this.authStore.getState(accountId);
-
-        const merged: AuthenticationCreds = {
-          ...current.creds,
-          ...update,
-        };
-
-        await this.authStore.saveCreds(
-          accountId,
-          merged,
-        );
+      async () => {
+        try {
+          await this.authStore.saveCreds(
+            accountId,
+            authState.creds,
+          );
+        } catch (error) {
+          console.error(
+            "[whatsapp] creds.update save failed",
+            {
+              accountId,
+              error:
+                error instanceof Error
+                  ? error.message
+                  : "unknown",
+            },
+          );
+        }
       },
     );
 
@@ -508,6 +977,9 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
           const info =
             accountInfoFromSocket(socket);
 
+          const whatsappType =
+            await detectWhatsAppType(socket);
+
           await prisma.whatsAppAccount.update({
             where: { id: accountId },
             data: {
@@ -516,8 +988,8 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
                 info?.phoneNumber ?? undefined,
               displayName:
                 info?.displayName ?? undefined,
-              whatsappType:
-                info?.whatsappType ?? "WHATSAPP",
+              whatsappType,
+
               connectedAt: new Date(),
               disconnectedAt: null,
               lastSyncAt: new Date(),
@@ -554,7 +1026,7 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
           });
 
           if (loggedOut) {
-            sessions.delete(accountId);
+            cleanupRuntimeSession(accountId);
             await this.authStore.clear(accountId);
             return;
           }
@@ -563,6 +1035,21 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
             isRestartRequired(lastDisconnect?.error)
           ) {
             current.reconnectAttempts = 0;
+
+            clearTimeout(current.reconnectTimer);
+            current.reconnectTimer = undefined;
+
+            current.reconnectTimer = setTimeout(() => {
+              current.reconnectTimer = undefined;
+
+              void this.startSession(
+                accountId,
+                userId,
+                sessionId,
+              );
+            }, 500);
+
+            return;
           }
 
           current.reconnectAttempts += 1;
@@ -579,11 +1066,12 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
               },
             });
 
-            sessions.delete(accountId);
+            cleanupRuntimeSession(accountId);
             return;
           }
 
           clearTimeout(current.reconnectTimer);
+          current.reconnectTimer = undefined;
 
           const delay = Math.min(
             1000 *
@@ -596,6 +1084,8 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
 
           current.reconnectTimer =
             setTimeout(() => {
+              current.reconnectTimer = undefined;
+
               void this.startSession(
                 accountId,
                 userId,
@@ -605,6 +1095,8 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
         }
       },
     );
+
+    startingAccounts.delete(accountId);
 
     socket.ev.on(
       "messages.upsert",
@@ -618,14 +1110,60 @@ export class BaileysWhatsAppConnector implements WhatsAppConnector {
             continue;
           }
 
-          console.log(
-            JSON.stringify({
-              event: "whatsapp.message.received",
+          const normalized =
+            normalizeBaileysMessage(
+              message,
               accountId,
-              messageId: message.key.id,
-              remoteJid: message.key.remoteJid,
-            }),
-          );
+            );
+
+          if (!normalized.externalMessageId) {
+            continue;
+          }
+
+          if (!normalized.fromNumber) {
+            console.warn(
+              JSON.stringify({
+                event: "whatsapp.message.skipped",
+                accountId,
+                messageId:
+                  normalized.externalMessageId,
+                reason:
+                  "SENDER_NUMBER_UNAVAILABLE",
+              }),
+            );
+            continue;
+          }
+
+          try {
+            await processInboundMessage(
+              normalized,
+            );
+
+            console.log(
+              JSON.stringify({
+                event:
+                  "whatsapp.message.processed",
+                accountId,
+                messageId:
+                  normalized.externalMessageId,
+                type: normalized.type,
+              }),
+            );
+          } catch (error) {
+            console.error(
+              JSON.stringify({
+                event:
+                  "whatsapp.message.processing_failed",
+                accountId,
+                messageId:
+                  normalized.externalMessageId,
+                error:
+                  error instanceof Error
+                    ? error.message
+                    : "unknown",
+              }),
+            );
+          }
         }
       },
     );

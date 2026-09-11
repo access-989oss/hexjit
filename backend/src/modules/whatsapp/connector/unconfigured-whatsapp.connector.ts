@@ -17,6 +17,24 @@ function notConfigured(): never {
 }
 
 export class UnconfiguredWhatsAppConnector implements WhatsAppConnector {
+  async requestPairingCode(
+    input: {
+      userId: string;
+      phoneNumber: string;
+      accountId?: string;
+    },
+  ): Promise<{
+    sessionId: string;
+    accountId: string;
+    code: string;
+    expiresAt?: Date | null;
+  }> {
+    throw new WhatsAppConnectorError(
+      "WHATSAPP_CONNECTOR_NOT_CONFIGURED",
+      "WhatsApp connector is not configured.",
+    );
+  }
+
   async createQrSession(
     _input: CreateQrSessionInput,
   ): Promise<WhatsAppQrSession> {

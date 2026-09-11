@@ -12,12 +12,16 @@ import {
   configureWhatsAppAccount,
   testConfiguredWhatsApp,
 } from "./admin-whatsapp.service.js";
+import { requireAdmin } from "../../../middleware/admin-auth.js";
 
 export async function registerWhatsAppAdminRoutes(
   app: FastifyInstance,
 ) {
   app.get(
     "/admin/whatsapp/accounts",
+    {
+      preHandler: requireAdmin,
+    },
     async () => {
       return {
         success: true,
@@ -29,6 +33,9 @@ export async function registerWhatsAppAdminRoutes(
 
   app.post(
     "/admin/whatsapp/accounts",
+    {
+      preHandler: requireAdmin,
+    },
     async (request, reply) => {
       const parsed =
         configureWhatsAppSchema.safeParse(
@@ -61,6 +68,9 @@ export async function registerWhatsAppAdminRoutes(
 
   app.post(
     "/admin/whatsapp/accounts/:id/test",
+    {
+      preHandler: requireAdmin,
+    },
     async (request, reply) => {
       const parsed =
         whatsappAccountIdSchema.safeParse(

@@ -8,17 +8,26 @@ import {
   providerTestSchema,
 } from "./provider.preset.schemas.js";
 import { testProviderConnection } from "./provider-test.service.js";
+import { requireAdmin } from "../../../middleware/admin-auth.js";
 
 export async function registerProviderControlRoutes(
   app: FastifyInstance,
 ) {
-  app.get("/admin/ai/providers/presets", async () => ({
+  app.get(
+    "/admin/ai/providers/presets",
+    {
+      preHandler: requireAdmin,
+    },
+    async () => ({
     success: true,
     data: AI_PROVIDER_PRESETS,
   }));
 
   app.get(
     "/admin/ai/providers/presets/:slug",
+    {
+      preHandler: requireAdmin,
+    },
     async (request, reply) => {
       const parsed = providerPresetSlugSchema.safeParse(
         request.params,
@@ -55,6 +64,9 @@ export async function registerProviderControlRoutes(
 
   app.post(
     "/admin/ai/providers/test",
+    {
+      preHandler: requireAdmin,
+    },
     async (request, reply) => {
       const parsed = providerTestSchema.safeParse(
         request.body,

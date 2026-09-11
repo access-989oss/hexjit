@@ -1,6 +1,8 @@
 import {
   getWhatsAppAccountSecret,
 } from "../account/account.service.js";
+import { prisma } from "../../../lib/prisma.js";
+import { getWhatsAppConnector } from "../connector/whatsapp-connector.factory.js";
 
 const GRAPH_VERSION =
   process.env.META_GRAPH_VERSION ?? "v23.0";
@@ -20,6 +22,35 @@ export async function sendWhatsAppTextMessage(input: {
     throw new Error(
       "WHATSAPP_MESSAGE_EMPTY",
     );
+  }
+
+  const connectorAccount = await prisma.whatsAppAccount.findUnique({
+    where: {
+      id: input.accountId,
+    },
+    select: {
+      id: true,
+      connectorType: true,
+    },
+  });
+
+  if (!connectorAccount) {
+    throw new Error(
+      "WHATSAPP_ACCOUNT_NOT_FOUND",
+    );
+  }
+
+  if (connectorAccount.connectorType === "BAILEYS") {
+    const result = await getWhatsAppConnector().sendText({
+      accountId: input.accountId,
+      to: input.recipientPhone,
+      text: input.text,
+    });
+
+    return {
+      success: true,
+      externalMessageId: result.externalMessageId,
+    };
   }
 
   const account =
