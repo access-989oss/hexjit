@@ -30,6 +30,10 @@ import {
 } from "../../automation/runtime/production-ai-reply.service.js";
 
 import {
+  scheduleFollowUp as scheduleFollowUpJob,
+} from "../../scheduler/index.js";
+
+import {
   sendWhatsAppTextMessage,
 } from "../message/outbound.service.js";
 
@@ -40,6 +44,29 @@ import {
 import type {
   WhatsAppNormalizedMessage,
 } from "../normalizer/whatsapp.types.js";
+
+function parseFollowUpDelay(
+  config: Record<string, unknown>,
+): number {
+  const candidates: Array<[unknown, number]> = [
+    [config.delayMs, 1],
+    [config.seconds, 1000],
+    [config.minutes, 60 * 1000],
+    [config.hours, 60 * 60 * 1000],
+  ];
+
+  for (const [value, multiplier] of candidates) {
+    if (
+      typeof value === "number" &&
+      Number.isFinite(value) &&
+      value >= 0
+    ) {
+      return value * multiplier;
+    }
+  }
+
+  return 60 * 60 * 1000;
+}
 
 function toImportance(
   value: number,
@@ -843,6 +870,30 @@ export async function processInboundMessage(
         analyzeImage: async () => {
           throw new Error(
             "ANALYZE_IMAGE_RUNTIME_NOT_CONNECTED",
+          );
+        },
+
+        scheduleFollowUp: async (actionConfig) => {
+          const delayMs =
+            parseFollowUpDelay(actionConfig);
+
+          const message =
+            typeof actionConfig.message === "string"
+              ? actionConfig.message.trim()
+              : "";
+
+          return scheduleFollowUpJob(
+            {
+              userId: account.userId,
+              accountId: account.id,
+              recipientPhone: fromNumber,
+              message,
+              metadata: {
+                conversationId: conversation.id,
+                contactId: contact.id,
+              },
+            },
+            delayMs,
           );
         },
       },

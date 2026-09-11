@@ -42,4 +42,8 @@ export type AutomationRuntimeContext = {
   analyzeImage?: (
     input: Record<string, unknown>,
   ) => Promise<unknown>;
+
+  scheduleFollowUp?: (
+    input: Record<string, unknown>,
+  ) => Promise<unknown>;
 };
