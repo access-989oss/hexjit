@@ -8,6 +8,10 @@ export {
 } from "./follow-up.service.js";
 
 export {
+  scheduleDelayedReply,
+} from "./delayed-reply.service.js";
+
+export {
   scheduleAutomationAction,
 } from "./automation-action-scheduler.service.js";
 
@@ -19,6 +23,7 @@ export type {
   ScheduledJobType,
   FollowUpJobData,
   ScheduledAutomationJobData,
+  DelayedReplyJobData,
 } from "./scheduler.types.js";
 
 

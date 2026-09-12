@@ -1,6 +1,7 @@
 export const SCHEDULED_JOB_TYPES = {
   FOLLOW_UP: "FOLLOW_UP",
   AUTOMATION_ACTION: "AUTOMATION_ACTION",
+  DELAYED_REPLY: "DELAYED_REPLY",
   SYSTEM_TASK: "SYSTEM_TASK",
 } as const;
 
@@ -23,4 +24,13 @@ export type ScheduledAutomationJobData = {
   conversationId?: string;
   action: string;
   config?: Record<string, unknown>;
+};
+
+export type DelayedReplyJobData = {
+  userId: string;
+  accountId: string;
+  conversationId: string;
+  recipientPhone: string;
+  text: string;
+  externalMessageId: string;
 };

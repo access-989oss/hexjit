@@ -31,6 +31,7 @@ import {
 
 import {
   scheduleFollowUp as scheduleFollowUpJob,
+  scheduleDelayedReply,
 } from "../../scheduler/index.js";
 
 import {
@@ -363,7 +364,7 @@ async function persistConversationMessage(
   });
 }
 
-async function handleAiReply(
+export async function handleAiReply(
   input: {
     userId: string;
     accountId: string;
@@ -371,6 +372,7 @@ async function handleAiReply(
     recipientPhone: string;
     text?: string;
     externalMessageId: string;
+    skipDelay?: boolean;
   },
 ) {
   const replyText =
@@ -380,6 +382,49 @@ async function handleAiReply(
     throw new Error(
       "AI_REPLY_TEXT_REQUIRED",
     );
+  }
+
+  /*
+   * Reply-delay: if the persona has replyDelaySeconds > 0 and
+   * this is not already a delayed execution, schedule a
+   * DELAYED_REPLY job instead of replying immediately.
+   *
+   * The persona, memory, and recent messages are re-loaded
+   * inside the worker at execution time, so the reply reflects
+   * the freshest context.
+   */
+  if (!input.skipDelay) {
+    const personaDelay =
+      await prisma.persona.findUnique({
+        where: {
+          userId: input.userId,
+        },
+        select: {
+          replyDelaySeconds: true,
+        },
+      });
+
+    const delaySeconds =
+      personaDelay?.replyDelaySeconds ?? 0;
+
+    if (delaySeconds > 0) {
+      await scheduleDelayedReply(
+        {
+          userId: input.userId,
+          accountId: input.accountId,
+          conversationId: input.conversationId,
+          recipientPhone: input.recipientPhone,
+          text: replyText,
+          externalMessageId: input.externalMessageId,
+        },
+        delaySeconds * 1000,
+      );
+
+      return {
+        scheduled: true,
+        delaySeconds,
+      };
+    }
   }
 
   const context =

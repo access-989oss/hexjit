@@ -1,5 +1,6 @@
 import { executeAutomationContinuation } from "./automation-continuation.service.js";
 import { executeFollowUpJob } from "./follow-up-runtime.service.js";
+import { executeDelayedReply } from "./delayed-reply-runtime.service.js";
 import {
   Worker,
   type Job,
@@ -16,6 +17,7 @@ import {
 import {
   SCHEDULED_JOB_TYPES,
   type FollowUpJobData,
+  type DelayedReplyJobData,
 } from "./scheduler.types.js";
 
 import {
@@ -72,6 +74,10 @@ export const schedulerWorker =
             job as Job<FollowUpJobData>,
           );
 
+        case SCHEDULED_JOB_TYPES.DELAYED_REPLY:
+          return executeDelayedReply(
+            job.data as DelayedReplyJobData,
+          );
 
         case SCHEDULED_JOB_TYPES.SYSTEM_TASK:
           return {
