@@ -49,6 +49,7 @@ export type PersonaMinAggregateOutputType = {
   aiName: string | null
   identityDescription: string | null
   replyDelaySeconds: number | null
+  languageMode: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -68,6 +69,7 @@ export type PersonaMaxAggregateOutputType = {
   aiName: string | null
   identityDescription: string | null
   replyDelaySeconds: number | null
+  languageMode: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -88,6 +90,7 @@ export type PersonaCountAggregateOutputType = {
   aiName: number
   identityDescription: number
   replyDelaySeconds: number
+  languageMode: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -117,6 +120,7 @@ export type PersonaMinAggregateInputType = {
   aiName?: true
   identityDescription?: true
   replyDelaySeconds?: true
+  languageMode?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -136,6 +140,7 @@ export type PersonaMaxAggregateInputType = {
   aiName?: true
   identityDescription?: true
   replyDelaySeconds?: true
+  languageMode?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -156,6 +161,7 @@ export type PersonaCountAggregateInputType = {
   aiName?: true
   identityDescription?: true
   replyDelaySeconds?: true
+  languageMode?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -263,6 +269,7 @@ export type PersonaGroupByOutputType = {
   aiName: string | null
   identityDescription: string | null
   replyDelaySeconds: number | null
+  languageMode: string | null
   createdAt: Date
   updatedAt: Date
   _count: PersonaCountAggregateOutputType | null
@@ -306,6 +313,7 @@ export type PersonaWhereInput = {
   aiName?: Prisma.StringNullableFilter<"Persona"> | string | null
   identityDescription?: Prisma.StringNullableFilter<"Persona"> | string | null
   replyDelaySeconds?: Prisma.IntNullableFilter<"Persona"> | number | null
+  languageMode?: Prisma.StringNullableFilter<"Persona"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Persona"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Persona"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -327,6 +335,7 @@ export type PersonaOrderByWithRelationInput = {
   aiName?: Prisma.SortOrderInput | Prisma.SortOrder
   identityDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   replyDelaySeconds?: Prisma.SortOrderInput | Prisma.SortOrder
+  languageMode?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -351,6 +360,7 @@ export type PersonaWhereUniqueInput = Prisma.AtLeast<{
   aiName?: Prisma.StringNullableFilter<"Persona"> | string | null
   identityDescription?: Prisma.StringNullableFilter<"Persona"> | string | null
   replyDelaySeconds?: Prisma.IntNullableFilter<"Persona"> | number | null
+  languageMode?: Prisma.StringNullableFilter<"Persona"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Persona"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Persona"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -372,6 +382,7 @@ export type PersonaOrderByWithAggregationInput = {
   aiName?: Prisma.SortOrderInput | Prisma.SortOrder
   identityDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   replyDelaySeconds?: Prisma.SortOrderInput | Prisma.SortOrder
+  languageMode?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PersonaCountOrderByAggregateInput
@@ -400,6 +411,7 @@ export type PersonaScalarWhereWithAggregatesInput = {
   aiName?: Prisma.StringNullableWithAggregatesFilter<"Persona"> | string | null
   identityDescription?: Prisma.StringNullableWithAggregatesFilter<"Persona"> | string | null
   replyDelaySeconds?: Prisma.IntNullableWithAggregatesFilter<"Persona"> | number | null
+  languageMode?: Prisma.StringNullableWithAggregatesFilter<"Persona"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Persona"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Persona"> | Date | string
 }
@@ -419,6 +431,7 @@ export type PersonaCreateInput = {
   aiName?: string | null
   identityDescription?: string | null
   replyDelaySeconds?: number | null
+  languageMode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPersonaInput
@@ -440,6 +453,7 @@ export type PersonaUncheckedCreateInput = {
   aiName?: string | null
   identityDescription?: string | null
   replyDelaySeconds?: number | null
+  languageMode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -459,6 +473,7 @@ export type PersonaUpdateInput = {
   aiName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   identityDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   replyDelaySeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  languageMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPersonaNestedInput
@@ -480,6 +495,7 @@ export type PersonaUncheckedUpdateInput = {
   aiName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   identityDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   replyDelaySeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  languageMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -500,6 +516,7 @@ export type PersonaCreateManyInput = {
   aiName?: string | null
   identityDescription?: string | null
   replyDelaySeconds?: number | null
+  languageMode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -519,6 +536,7 @@ export type PersonaUpdateManyMutationInput = {
   aiName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   identityDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   replyDelaySeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  languageMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -539,6 +557,7 @@ export type PersonaUncheckedUpdateManyInput = {
   aiName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   identityDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   replyDelaySeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  languageMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -564,6 +583,7 @@ export type PersonaCountOrderByAggregateInput = {
   aiName?: Prisma.SortOrder
   identityDescription?: Prisma.SortOrder
   replyDelaySeconds?: Prisma.SortOrder
+  languageMode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -587,6 +607,7 @@ export type PersonaMaxOrderByAggregateInput = {
   aiName?: Prisma.SortOrder
   identityDescription?: Prisma.SortOrder
   replyDelaySeconds?: Prisma.SortOrder
+  languageMode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -606,6 +627,7 @@ export type PersonaMinOrderByAggregateInput = {
   aiName?: Prisma.SortOrder
   identityDescription?: Prisma.SortOrder
   replyDelaySeconds?: Prisma.SortOrder
+  languageMode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -669,6 +691,7 @@ export type PersonaCreateWithoutUserInput = {
   aiName?: string | null
   identityDescription?: string | null
   replyDelaySeconds?: number | null
+  languageMode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -688,6 +711,7 @@ export type PersonaUncheckedCreateWithoutUserInput = {
   aiName?: string | null
   identityDescription?: string | null
   replyDelaySeconds?: number | null
+  languageMode?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -723,6 +747,7 @@ export type PersonaUpdateWithoutUserInput = {
   aiName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   identityDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   replyDelaySeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  languageMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -742,6 +767,7 @@ export type PersonaUncheckedUpdateWithoutUserInput = {
   aiName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   identityDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   replyDelaySeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  languageMode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -764,6 +790,7 @@ export type PersonaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   aiName?: boolean
   identityDescription?: boolean
   replyDelaySeconds?: boolean
+  languageMode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -785,6 +812,7 @@ export type PersonaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   aiName?: boolean
   identityDescription?: boolean
   replyDelaySeconds?: boolean
+  languageMode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -806,6 +834,7 @@ export type PersonaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   aiName?: boolean
   identityDescription?: boolean
   replyDelaySeconds?: boolean
+  languageMode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -827,11 +856,12 @@ export type PersonaSelectScalar = {
   aiName?: boolean
   identityDescription?: boolean
   replyDelaySeconds?: boolean
+  languageMode?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PersonaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "description" | "language" | "tone" | "vocabulary" | "emojiStyle" | "humorStyle" | "formality" | "responseLength" | "rules" | "aiName" | "identityDescription" | "replyDelaySeconds" | "createdAt" | "updatedAt", ExtArgs["result"]["persona"]>
+export type PersonaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "description" | "language" | "tone" | "vocabulary" | "emojiStyle" | "humorStyle" | "formality" | "responseLength" | "rules" | "aiName" | "identityDescription" | "replyDelaySeconds" | "languageMode" | "createdAt" | "updatedAt", ExtArgs["result"]["persona"]>
 export type PersonaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -863,6 +893,7 @@ export type $PersonaPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     aiName: string | null
     identityDescription: string | null
     replyDelaySeconds: number | null
+    languageMode: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["persona"]>
@@ -1304,6 +1335,7 @@ export interface PersonaFieldRefs {
   readonly aiName: Prisma.FieldRef<"Persona", 'String'>
   readonly identityDescription: Prisma.FieldRef<"Persona", 'String'>
   readonly replyDelaySeconds: Prisma.FieldRef<"Persona", 'Int'>
+  readonly languageMode: Prisma.FieldRef<"Persona", 'String'>
   readonly createdAt: Prisma.FieldRef<"Persona", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Persona", 'DateTime'>
 }

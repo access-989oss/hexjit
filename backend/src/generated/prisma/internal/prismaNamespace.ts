@@ -3217,6 +3217,7 @@ export const PersonaScalarFieldEnum = {
   aiName: 'aiName',
   identityDescription: 'identityDescription',
   replyDelaySeconds: 'replyDelaySeconds',
+  languageMode: 'languageMode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
