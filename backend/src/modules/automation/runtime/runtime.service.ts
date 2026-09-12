@@ -25,17 +25,33 @@ import {
   scheduleAutomationAction,
 } from "../../scheduler/automation-action-scheduler.service.js";
 
-function buildConditionContext(
+import {
+  loadPreviousMessage,
+  classifyIntent,
+} from "./condition-context.service.js";
+
+async function buildConditionContext(
   event: AutomationRuntimeEvent,
 ) {
+  const [previousMessage, aiIntent] =
+    await Promise.all([
+      loadPreviousMessage({
+        conversationId: event.conversationId,
+        currentExternalMessageId: event.messageId,
+      }),
+      Promise.resolve(
+        classifyIntent(event.text),
+      ),
+    ]);
+
   return {
     contactId: event.contactId,
     groupId: event.groupId,
     text: event.text,
     enabled: true,
     hour: new Date().getHours(),
-    previousMessage: undefined,
-    aiIntent: undefined,
+    previousMessage,
+    aiIntent,
   };
 }
 
@@ -44,13 +60,16 @@ export async function executePersistentAutomations(
   event: AutomationRuntimeEvent,
   runtime: AutomationRuntimeContext,
 ) {
+  const conditionContext =
+    await buildConditionContext(
+      event,
+    );
+
   const selected =
     selectAutomations(
       automations,
       event,
-      buildConditionContext(
-        event,
-      ),
+      conditionContext,
     );
 
   const results = [];
