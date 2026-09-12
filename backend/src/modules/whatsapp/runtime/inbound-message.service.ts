@@ -255,6 +255,18 @@ async function loadPersonaContext(
       "stranger"
         ? "Be polite and neutral."
         : undefined,
+
+    aiName:
+      persona?.aiName ?? undefined,
+
+    identityDescription:
+      persona?.identityDescription ?? undefined,
+
+    replyDelaySeconds:
+      typeof persona?.replyDelaySeconds ===
+        "number"
+        ? persona.replyDelaySeconds
+        : undefined,
   };
 
   const memoryItems = memories.map(

@@ -300,20 +300,23 @@ model Message {
 }
 
 model Persona {
-  id             String   @id @default(cuid())
-  userId         String   @unique
-  name           String?
-  description    String?
-  language       String?
-  tone           String?
-  vocabulary     String?
-  emojiStyle     String?
-  humorStyle     String?
-  formality      String?
-  responseLength String?
-  rules          Json?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  name                String?
+  description         String?
+  language            String?
+  tone                String?
+  vocabulary          String?
+  emojiStyle          String?
+  humorStyle          String?
+  formality           String?
+  responseLength      String?
+  rules               Json?
+  aiName              String?
+  identityDescription String?
+  replyDelaySeconds   Int?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -312,6 +312,9 @@ export const PersonaScalarFieldEnum = {
   formality: 'formality',
   responseLength: 'responseLength',
   rules: 'rules',
+  aiName: 'aiName',
+  identityDescription: 'identityDescription',
+  replyDelaySeconds: 'replyDelaySeconds',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

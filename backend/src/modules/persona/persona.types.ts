@@ -12,6 +12,16 @@ export type PersonaProfile = {
   behaviorWithFriends?: string;
   behaviorWithCustomers?: string;
   behaviorWithStrangers?: string;
+
+  /** AI's display name when introducing itself (default: "Hexjit"). */
+  aiName?: string;
+
+  /** How the AI describes its relation to the account owner,
+   *  e.g. "Rahul bhai ka personal assistant" or "Rahul boss ka dost". */
+  identityDescription?: string;
+
+  /** Reply delay in seconds. null/undefined = reply immediately. */
+  replyDelaySeconds?: number;
 };
 
 export type ContactPersonaOverride = {

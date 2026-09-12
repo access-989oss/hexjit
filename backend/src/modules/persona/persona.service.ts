@@ -14,6 +14,7 @@ const DEFAULT_PERSONA: PersonaProfile = {
   greetings: [],
   closings: [],
   communicationRules: [],
+  aiName: "Hexjit",
 };
 
 export function normalizePersona(

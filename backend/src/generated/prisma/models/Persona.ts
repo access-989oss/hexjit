@@ -20,8 +20,18 @@ export type PersonaModel = runtime.Types.Result.DefaultSelection<Prisma.$Persona
 
 export type AggregatePersona = {
   _count: PersonaCountAggregateOutputType | null
+  _avg: PersonaAvgAggregateOutputType | null
+  _sum: PersonaSumAggregateOutputType | null
   _min: PersonaMinAggregateOutputType | null
   _max: PersonaMaxAggregateOutputType | null
+}
+
+export type PersonaAvgAggregateOutputType = {
+  replyDelaySeconds: number | null
+}
+
+export type PersonaSumAggregateOutputType = {
+  replyDelaySeconds: number | null
 }
 
 export type PersonaMinAggregateOutputType = {
@@ -36,6 +46,9 @@ export type PersonaMinAggregateOutputType = {
   humorStyle: string | null
   formality: string | null
   responseLength: string | null
+  aiName: string | null
+  identityDescription: string | null
+  replyDelaySeconds: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,6 +65,9 @@ export type PersonaMaxAggregateOutputType = {
   humorStyle: string | null
   formality: string | null
   responseLength: string | null
+  aiName: string | null
+  identityDescription: string | null
+  replyDelaySeconds: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -69,11 +85,22 @@ export type PersonaCountAggregateOutputType = {
   formality: number
   responseLength: number
   rules: number
+  aiName: number
+  identityDescription: number
+  replyDelaySeconds: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type PersonaAvgAggregateInputType = {
+  replyDelaySeconds?: true
+}
+
+export type PersonaSumAggregateInputType = {
+  replyDelaySeconds?: true
+}
 
 export type PersonaMinAggregateInputType = {
   id?: true
@@ -87,6 +114,9 @@ export type PersonaMinAggregateInputType = {
   humorStyle?: true
   formality?: true
   responseLength?: true
+  aiName?: true
+  identityDescription?: true
+  replyDelaySeconds?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -103,6 +133,9 @@ export type PersonaMaxAggregateInputType = {
   humorStyle?: true
   formality?: true
   responseLength?: true
+  aiName?: true
+  identityDescription?: true
+  replyDelaySeconds?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -120,6 +153,9 @@ export type PersonaCountAggregateInputType = {
   formality?: true
   responseLength?: true
   rules?: true
+  aiName?: true
+  identityDescription?: true
+  replyDelaySeconds?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -163,6 +199,18 @@ export type PersonaAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: PersonaAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: PersonaSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: PersonaMinAggregateInputType
@@ -193,6 +241,8 @@ export type PersonaGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: PersonaCountAggregateInputType | true
+  _avg?: PersonaAvgAggregateInputType
+  _sum?: PersonaSumAggregateInputType
   _min?: PersonaMinAggregateInputType
   _max?: PersonaMaxAggregateInputType
 }
@@ -210,9 +260,14 @@ export type PersonaGroupByOutputType = {
   formality: string | null
   responseLength: string | null
   rules: runtime.JsonValue | null
+  aiName: string | null
+  identityDescription: string | null
+  replyDelaySeconds: number | null
   createdAt: Date
   updatedAt: Date
   _count: PersonaCountAggregateOutputType | null
+  _avg: PersonaAvgAggregateOutputType | null
+  _sum: PersonaSumAggregateOutputType | null
   _min: PersonaMinAggregateOutputType | null
   _max: PersonaMaxAggregateOutputType | null
 }
@@ -248,6 +303,9 @@ export type PersonaWhereInput = {
   formality?: Prisma.StringNullableFilter<"Persona"> | string | null
   responseLength?: Prisma.StringNullableFilter<"Persona"> | string | null
   rules?: Prisma.JsonNullableFilter<"Persona">
+  aiName?: Prisma.StringNullableFilter<"Persona"> | string | null
+  identityDescription?: Prisma.StringNullableFilter<"Persona"> | string | null
+  replyDelaySeconds?: Prisma.IntNullableFilter<"Persona"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Persona"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Persona"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -266,6 +324,9 @@ export type PersonaOrderByWithRelationInput = {
   formality?: Prisma.SortOrderInput | Prisma.SortOrder
   responseLength?: Prisma.SortOrderInput | Prisma.SortOrder
   rules?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiName?: Prisma.SortOrderInput | Prisma.SortOrder
+  identityDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  replyDelaySeconds?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -287,6 +348,9 @@ export type PersonaWhereUniqueInput = Prisma.AtLeast<{
   formality?: Prisma.StringNullableFilter<"Persona"> | string | null
   responseLength?: Prisma.StringNullableFilter<"Persona"> | string | null
   rules?: Prisma.JsonNullableFilter<"Persona">
+  aiName?: Prisma.StringNullableFilter<"Persona"> | string | null
+  identityDescription?: Prisma.StringNullableFilter<"Persona"> | string | null
+  replyDelaySeconds?: Prisma.IntNullableFilter<"Persona"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Persona"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Persona"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -305,11 +369,16 @@ export type PersonaOrderByWithAggregationInput = {
   formality?: Prisma.SortOrderInput | Prisma.SortOrder
   responseLength?: Prisma.SortOrderInput | Prisma.SortOrder
   rules?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiName?: Prisma.SortOrderInput | Prisma.SortOrder
+  identityDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  replyDelaySeconds?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PersonaCountOrderByAggregateInput
+  _avg?: Prisma.PersonaAvgOrderByAggregateInput
   _max?: Prisma.PersonaMaxOrderByAggregateInput
   _min?: Prisma.PersonaMinOrderByAggregateInput
+  _sum?: Prisma.PersonaSumOrderByAggregateInput
 }
 
 export type PersonaScalarWhereWithAggregatesInput = {
@@ -328,6 +397,9 @@ export type PersonaScalarWhereWithAggregatesInput = {
   formality?: Prisma.StringNullableWithAggregatesFilter<"Persona"> | string | null
   responseLength?: Prisma.StringNullableWithAggregatesFilter<"Persona"> | string | null
   rules?: Prisma.JsonNullableWithAggregatesFilter<"Persona">
+  aiName?: Prisma.StringNullableWithAggregatesFilter<"Persona"> | string | null
+  identityDescription?: Prisma.StringNullableWithAggregatesFilter<"Persona"> | string | null
+  replyDelaySeconds?: Prisma.IntNullableWithAggregatesFilter<"Persona"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Persona"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Persona"> | Date | string
 }
@@ -344,6 +416,9 @@ export type PersonaCreateInput = {
   formality?: string | null
   responseLength?: string | null
   rules?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  aiName?: string | null
+  identityDescription?: string | null
+  replyDelaySeconds?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPersonaInput
@@ -362,6 +437,9 @@ export type PersonaUncheckedCreateInput = {
   formality?: string | null
   responseLength?: string | null
   rules?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  aiName?: string | null
+  identityDescription?: string | null
+  replyDelaySeconds?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -378,6 +456,9 @@ export type PersonaUpdateInput = {
   formality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseLength?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rules?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  aiName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyDelaySeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPersonaNestedInput
@@ -396,6 +477,9 @@ export type PersonaUncheckedUpdateInput = {
   formality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseLength?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rules?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  aiName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyDelaySeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -413,6 +497,9 @@ export type PersonaCreateManyInput = {
   formality?: string | null
   responseLength?: string | null
   rules?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  aiName?: string | null
+  identityDescription?: string | null
+  replyDelaySeconds?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -429,6 +516,9 @@ export type PersonaUpdateManyMutationInput = {
   formality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseLength?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rules?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  aiName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyDelaySeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -446,6 +536,9 @@ export type PersonaUncheckedUpdateManyInput = {
   formality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseLength?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rules?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  aiName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyDelaySeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -468,8 +561,15 @@ export type PersonaCountOrderByAggregateInput = {
   formality?: Prisma.SortOrder
   responseLength?: Prisma.SortOrder
   rules?: Prisma.SortOrder
+  aiName?: Prisma.SortOrder
+  identityDescription?: Prisma.SortOrder
+  replyDelaySeconds?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type PersonaAvgOrderByAggregateInput = {
+  replyDelaySeconds?: Prisma.SortOrder
 }
 
 export type PersonaMaxOrderByAggregateInput = {
@@ -484,6 +584,9 @@ export type PersonaMaxOrderByAggregateInput = {
   humorStyle?: Prisma.SortOrder
   formality?: Prisma.SortOrder
   responseLength?: Prisma.SortOrder
+  aiName?: Prisma.SortOrder
+  identityDescription?: Prisma.SortOrder
+  replyDelaySeconds?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -500,8 +603,15 @@ export type PersonaMinOrderByAggregateInput = {
   humorStyle?: Prisma.SortOrder
   formality?: Prisma.SortOrder
   responseLength?: Prisma.SortOrder
+  aiName?: Prisma.SortOrder
+  identityDescription?: Prisma.SortOrder
+  replyDelaySeconds?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type PersonaSumOrderByAggregateInput = {
+  replyDelaySeconds?: Prisma.SortOrder
 }
 
 export type PersonaCreateNestedOneWithoutUserInput = {
@@ -536,6 +646,14 @@ export type PersonaUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PersonaUpdateToOneWithWhereWithoutUserInput, Prisma.PersonaUpdateWithoutUserInput>, Prisma.PersonaUncheckedUpdateWithoutUserInput>
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type PersonaCreateWithoutUserInput = {
   id?: string
   name?: string | null
@@ -548,6 +666,9 @@ export type PersonaCreateWithoutUserInput = {
   formality?: string | null
   responseLength?: string | null
   rules?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  aiName?: string | null
+  identityDescription?: string | null
+  replyDelaySeconds?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -564,6 +685,9 @@ export type PersonaUncheckedCreateWithoutUserInput = {
   formality?: string | null
   responseLength?: string | null
   rules?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  aiName?: string | null
+  identityDescription?: string | null
+  replyDelaySeconds?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -596,6 +720,9 @@ export type PersonaUpdateWithoutUserInput = {
   formality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseLength?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rules?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  aiName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyDelaySeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -612,6 +739,9 @@ export type PersonaUncheckedUpdateWithoutUserInput = {
   formality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseLength?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rules?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  aiName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyDelaySeconds?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -631,6 +761,9 @@ export type PersonaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   formality?: boolean
   responseLength?: boolean
   rules?: boolean
+  aiName?: boolean
+  identityDescription?: boolean
+  replyDelaySeconds?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -649,6 +782,9 @@ export type PersonaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   formality?: boolean
   responseLength?: boolean
   rules?: boolean
+  aiName?: boolean
+  identityDescription?: boolean
+  replyDelaySeconds?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -667,6 +803,9 @@ export type PersonaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   formality?: boolean
   responseLength?: boolean
   rules?: boolean
+  aiName?: boolean
+  identityDescription?: boolean
+  replyDelaySeconds?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -685,11 +824,14 @@ export type PersonaSelectScalar = {
   formality?: boolean
   responseLength?: boolean
   rules?: boolean
+  aiName?: boolean
+  identityDescription?: boolean
+  replyDelaySeconds?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PersonaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "description" | "language" | "tone" | "vocabulary" | "emojiStyle" | "humorStyle" | "formality" | "responseLength" | "rules" | "createdAt" | "updatedAt", ExtArgs["result"]["persona"]>
+export type PersonaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "description" | "language" | "tone" | "vocabulary" | "emojiStyle" | "humorStyle" | "formality" | "responseLength" | "rules" | "aiName" | "identityDescription" | "replyDelaySeconds" | "createdAt" | "updatedAt", ExtArgs["result"]["persona"]>
 export type PersonaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -718,6 +860,9 @@ export type $PersonaPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     formality: string | null
     responseLength: string | null
     rules: runtime.JsonValue | null
+    aiName: string | null
+    identityDescription: string | null
+    replyDelaySeconds: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["persona"]>
@@ -1156,6 +1301,9 @@ export interface PersonaFieldRefs {
   readonly formality: Prisma.FieldRef<"Persona", 'String'>
   readonly responseLength: Prisma.FieldRef<"Persona", 'String'>
   readonly rules: Prisma.FieldRef<"Persona", 'Json'>
+  readonly aiName: Prisma.FieldRef<"Persona", 'String'>
+  readonly identityDescription: Prisma.FieldRef<"Persona", 'String'>
+  readonly replyDelaySeconds: Prisma.FieldRef<"Persona", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Persona", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Persona", 'DateTime'>
 }
