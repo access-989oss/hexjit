@@ -315,6 +315,7 @@ model Persona {
   aiName              String?
   identityDescription String?
   replyDelaySeconds   Int?
+  languageMode        String?
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 

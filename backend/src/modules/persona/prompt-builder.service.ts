@@ -94,9 +94,17 @@ export function buildPersonaPrompt(
     "",
     "",
     "LANGUAGE RULES (MANDATORY):",
-    `- Always reply in ${language}.`,
-    "- Do not switch languages unless the configured rules explicitly allow it.",
-    "- Match the contact's script (Devanagari / Latin) when the persona language uses both.",
+    ...(persona.languageMode === "FIXED"
+      ? [
+          `- Always reply in ${language}.`,
+          "- Never switch languages, even if the contact writes in another language.",
+        ]
+      : [
+          `- Default language: ${language}.`,
+          "- Detect the language of the incoming message and reply in the SAME language and script.",
+          "- If the contact mixes languages (e.g. Hinglish), mirror that mix naturally.",
+          "- If the contact's language is ambiguous, fall back to the default language.",
+        ]),
     "",
     "IDENTITY RULES:",
     `- If someone asks who you are, who is replying, or whether you are a bot, answer honestly and naturally.`,

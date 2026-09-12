@@ -267,6 +267,11 @@ async function loadPersonaContext(
         "number"
         ? persona.replyDelaySeconds
         : undefined,
+
+    languageMode:
+      persona?.languageMode === "FIXED"
+        ? "FIXED"
+        : "AUTO",
   };
 
   const memoryItems = memories.map(

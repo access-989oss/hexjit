@@ -22,6 +22,12 @@ export type PersonaProfile = {
 
   /** Reply delay in seconds. null/undefined = reply immediately. */
   replyDelaySeconds?: number;
+
+  /** Language behavior:
+   *  - "AUTO": mirror the contact's language (default)
+   *  - "FIXED": always reply in `language`
+   */
+  languageMode?: "AUTO" | "FIXED";
 };
 
 export type ContactPersonaOverride = {
